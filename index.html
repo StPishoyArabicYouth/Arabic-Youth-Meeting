@@ -281,6 +281,15 @@
       margin-top:14px;padding:13px;border-radius:14px;background:#f8fafc;
       color:var(--muted);font-size:13px;line-height:1.7;text-align:center;
     }
+    .conference-poster{width:100%;display:block;border-radius:18px;border:1px solid #e5e7eb;margin-bottom:14px;cursor:zoom-in}
+    .conference-card{text-align:right}
+    .conference-card h3{margin:0 0 6px;color:var(--navy);font-size:23px}
+    .conference-card .tagline{color:#7a5d13;font-weight:800;margin-bottom:14px}
+    .conference-row{padding:10px 0;border-bottom:1px solid #eef0f3}
+    .conference-row:last-of-type{border-bottom:0}
+    .conference-row b{display:block;color:var(--navy);margin-bottom:2px}
+    .register-btn{display:block;text-align:center;text-decoration:none;background:var(--navy);color:#fff;border-radius:14px;padding:13px 16px;font-weight:900;margin-top:16px}
+    .poster-note{text-align:center;color:var(--muted);font-size:12px;margin:-5px 0 14px}
     .media-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .media-placeholder{
       min-height:130px;border-radius:20px;background:#f8fafc;border:1px solid #e5e7eb;
@@ -432,10 +441,19 @@
     trips:{
       icon:'🚌', title:'الرحلات والمؤتمرات', subtitle:'الرحلات والمؤتمرات القادمة',
       html:`
-        <div class="empty-card">
-          <div class="empty-icon">🚌</div>
-          <h3>لا توجد رحلة أو مؤتمر مضاف حاليًا</h3>
-          <p>عند إضافة رحلة أو مؤتمر ستظهر التفاصيل والتسجيل هنا.</p>
+        <a href="conference-2026.png" target="_blank" aria-label="فتح بوستر المؤتمر بالحجم الكامل">
+          <img class="conference-poster" src="conference-2026.png" alt="بوستر مؤتمر الشبان والشابات بكنائس ناشفيل 2026">
+        </a>
+        <div class="poster-note">اضغط على البوستر لعرضه بالحجم الكامل</div>
+        <div class="info-card conference-card">
+          <h3>مؤتمر الشبان والشابات بكنائس ناشفيل</h3>
+          <div class="tagline">إنسان ولكن...<br>رحلة لاكتشاف الإنسان كما يراه الله</div>
+          <div class="conference-row"><b>ضيف المؤتمر</b>قدس أبونا دوماديوس عزيز<br>كنيسة العذراء، جورجيا</div>
+          <div class="conference-row"><b>التاريخ</b>من 11 إلى 14 ديسمبر 2026</div>
+          <div class="conference-row"><b>المكان</b>دير السيدة العذراء والقديسة دميانة، جورجيا<br>St. Mary &amp; St. Damiana Convent, Georgia</div>
+          <div class="conference-row"><b>رسوم التسجيل</b>$250 حتى 30 سبتمبر<br>$275 من 1 إلى 15 أكتوبر</div>
+          <div class="conference-row"><b>للاستفسار</b>شريف: 615-720-2901<br>نبيل: 201-283-2477<br>بولس: 629-468-1319</div>
+          <a class="register-btn" href="https://www.zeffy.com/en-US/ticketing/arabic-youth-meeting" target="_blank" rel="noopener">التسجيل في المؤتمر</a>
         </div>`
     },
     hymns:{

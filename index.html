@@ -309,6 +309,20 @@
     .media-placeholder span{font-size:15px;font-weight:800}
 
   </style>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
+<script>
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+
+OneSignalDeferred.push(async function(OneSignal) {
+  await OneSignal.init({
+appId: "0b7b8ffd-f5be-4b76-a7b2-57eeedaf49dc",
+serviceWorkerPath: "/Arabic-Youth-Meeting/push/onesignal/OneSignalSDKWorker.js",serviceWorkerParam: {
+  scope: "/Arabic-Youth-Meeting/push/onesignal/"
+}
+  });
+});
+</script>
 </head>
 <body>
   <main class="app">

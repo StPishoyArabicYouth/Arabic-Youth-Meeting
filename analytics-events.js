@@ -108,10 +108,7 @@
 
     track('quiz_completed', {
       game_name: cleanText(title ? title.textContent : 'مسابقة'),
-      difficulty: cleanText(level ? level.textContent : ''),
-      score: Number(m[1]),
-      total_questions: Number(m[2]),
-      score_percent: Math.round(Number(m[1]) * 100 / Number(m[2]))
+      difficulty: cleanText(level ? level.textContent : '')
     });
   });
 

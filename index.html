@@ -328,7 +328,14 @@
 
 <div class="now" style="position:relative;">
           <div class="date" id="today">...</div>
-          <div class="time" id="clock">...</div>
+         <div class="time" id="clock" style="display:none;">...</div>
+  <div id="analogClock" style="position:absolute;right:16px;top:58%;transform:translateY(-50%);width:82px;height:82px;border:3px solid white;border-radius:50%;box-sizing:border-box;">
+  <div id="hourHand" style="position:absolute;width:4px;height:22px;background:white;left:50%;bottom:50%;transform-origin:bottom center;border-radius:4px;"></div>
+  <div id="minuteHand" style="position:absolute;width:3px;height:29px;background:white;left:50%;bottom:50%;transform-origin:bottom center;border-radius:4px;"></div>
+  <div id="secondHand" style="position:absolute;width:2px;height:31px;background:#d8b35a;left:50%;bottom:50%;transform-origin:bottom center;"></div>
+  <div style="position:absolute;width:8px;height:8px;background:white;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
+</div>
+
   <div id="weatherMini" style="display:none;position:absolute;left:18px;top:50%;transform:translateY(-50%);align-items:center;gap:8px;color:white;font-weight:bold;">
   <span id="weatherIcon" style="font-size:32px;">🌤️</span>
   <span id="weatherTemp" style="font-size:22px;">--°</span>
@@ -729,6 +736,27 @@ if ('geolocation' in navigator) {
     }
   });
 }
+</script>
+<script>
+function updateAnalogClock() {
+  const now = new Date();
+
+  const seconds = now.getSeconds();
+  const minutes = now.getMinutes() + seconds / 60;
+  const hours = (now.getHours() % 12) + minutes / 60;
+
+  document.getElementById('secondHand').style.transform =
+    `translateX(-50%) rotate(${seconds * 6}deg)`;
+
+  document.getElementById('minuteHand').style.transform =
+    `translateX(-50%) rotate(${minutes * 6}deg)`;
+
+  document.getElementById('hourHand').style.transform =
+    `translateX(-50%) rotate(${hours * 30}deg)`;
+}
+
+updateAnalogClock();
+setInterval(updateAnalogClock, 1000);
 </script>
 
 </body>

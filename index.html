@@ -317,8 +317,11 @@ window.OneSignalDeferred = window.OneSignalDeferred || [];
 OneSignalDeferred.push(async function(OneSignal) {
   await OneSignal.init({
 appId: "0b7b8ffd-f5be-4b76-a7b2-57eeedaf49dc",
-serviceWorkerPath: "/Arabic-Youth-Meeting/push/onesignal/OneSignalSDKWorker.js",serviceWorkerParam: {
+serviceWorkerPath: "Arabic-Youth-Meeting/push/onesignal/OneSignalSDKWorker.js",serviceWorkerParam: {
   scope: "/Arabic-Youth-Meeting/push/onesignal/"
+},
+notifyButton: {
+  enable: true
 }
   });
 });

@@ -326,9 +326,14 @@
 
         
 
-        <div class="now">
+<div class="now" style="position:relative;">
           <div class="date" id="today">...</div>
           <div class="time" id="clock">...</div>
+  <div id="weatherMini" style="display:none;position:absolute;left:18px;top:50%;transform:translateY(-50%);align-items:center;gap:8px;color:white;font-weight:bold;">
+  <span id="weatherIcon" style="font-size:32px;">🌤️</span>
+  <span id="weatherTemp" style="font-size:22px;">--°</span>
+</div>
+
         </div>
 
         <div class="meeting">
@@ -687,6 +692,43 @@ shareBtn.addEventListener('click', async () => {
     alert('تم نسخ رابط التطبيق');
   }
 });
+</script>
+<script>
+function weatherEmoji(code) {
+  if (code === 0) return '☀️';
+  if (code <= 3) return '⛅';
+  if (code <= 48) return '🌫️';
+  if (code <= 67) return '🌧️';
+  if (code <= 77) return '❄️';
+  if (code <= 82) return '🌦️';
+  if (code <= 86) return '🌨️';
+  return '⛈️';
+}
+
+if ('geolocation' in navigator) {
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    try {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      const url =
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&temperature_unit=fahrenheit`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      document.getElementById('weatherIcon').textContent =
+        weatherEmoji(data.current.weather_code);
+
+      document.getElementById('weatherTemp').textContent =
+        Math.round(data.current.temperature_2m) + '°F';
+
+      document.getElementById('weatherMini').style.display = 'flex';
+    } catch (e) {
+      console.log('Weather unavailable');
+    }
+  });
+}
 </script>
 
 </body>

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f2747">
+<title>مسابقات اجتماع الشباب</title>
+<style>
+:root{--navy:#0f2747;--gold:#c7a447;--ink:#18202a;--muted:#6b7280;--bg:#f4f6f8;--card:#fff;--good:#16803b;--bad:#b42318;--shadow:0 10px 28px rgba(15,39,71,.12)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(180deg,#eef2f6 0%,#f8f9fb 48%,#fff 100%);color:var(--ink)}
+.app{width:min(100%,760px);margin:auto;min-height:100vh;padding:16px 14px 40px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.back{text-decoration:none;background:var(--navy);color:#fff;padding:11px 15px;border-radius:14px;font-weight:800}
+.badge{font-size:13px;color:#7a5d13;background:#fff8e6;border:1px solid #ead8a0;padding:8px 12px;border-radius:999px;font-weight:800}
+.hero{background:#fff;border:1px solid rgba(15,39,71,.08);border-radius:26px;padding:22px 18px;text-align:center;box-shadow:var(--shadow)}
+.hero .cup{font-size:54px} .hero h1{margin:6px 0;color:var(--navy);font-size:30px} .hero p{margin:0;color:var(--muted);line-height:1.8}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.stat{background:#f8fafc;border:1px solid #e5e7eb;border-radius:15px;padding:10px}
+.stat b{display:block;color:var(--navy);font-size:20px} .stat span{font-size:12px;color:var(--muted)}
+.section-title{margin:22px 4px 12px;color:var(--navy);font-weight:900;font-size:20px}
+.games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.game-card{border:0;background:#fff;border-radius:22px;box-shadow:0 7px 20px rgba(15,39,71,.09);padding:18px 12px;min-height:160px;cursor:pointer;text-align:center;color:var(--navy);font-family:inherit}
+.game-card:active{transform:scale(.985)} .game-icon{font-size:42px} .game-card h3{margin:9px 0 5px;font-size:18px} .game-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+.panel{display:none;background:#fff;border-radius:24px;box-shadow:var(--shadow);padding:18px;border:1px solid rgba(15,39,71,.08)}
+.panel.active{display:block} .panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.panel-head h2{margin:0;color:var(--navy)} .small-btn{border:0;background:#eef2f6;color:var(--navy);border-radius:12px;padding:9px 12px;font-weight:800;cursor:pointer}
+.progress-wrap{height:9px;background:#eef0f3;border-radius:999px;overflow:hidden;margin:12px 0} .progress{height:100%;width:0;background:var(--gold);transition:.25s}
+.scoreline{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:13px;font-weight:800}
+.question{font-size:22px;line-height:1.65;color:var(--navy);font-weight:900;margin:18px 0;text-align:center}
+.answers{display:grid;gap:10px} .answer{border:2px solid #e5e7eb;background:#fff;border-radius:16px;padding:14px 12px;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;color:var(--ink);text-align:right}
+.answer:hover{border-color:#cfd7e3} .answer.correct{background:#ecfdf3;border-color:#75c58d;color:#126b32} .answer.wrong{background:#fff0ee;border-color:#e79a90;color:#9f2319}
+.answer:disabled{cursor:default} .feedback{min-height:64px;margin-top:14px;padding:12px;border-radius:15px;background:#f8fafc;line-height:1.7;text-align:center;font-weight:800}
+.ref{display:block;font-size:12px;color:#7a5d13;margin-top:4px}
+.result{text-align:center;padding:24px 10px} .result .big{font-size:58px} .result h3{font-size:26px;color:var(--navy);margin:8px 0} .result p{color:var(--muted)}
+.primary{border:0;background:var(--navy);color:#fff;border-radius:14px;padding:12px 16px;font-family:inherit;font-weight:900;cursor:pointer}
+.wheel-wrap{display:grid;place-items:center;padding:10px 0 20px}
+.pointer{width:0;height:0;border-left:15px solid transparent;border-right:15px solid transparent;border-top:28px solid var(--navy);margin-bottom:-8px;z-index:2}
+.wheel{width:min(78vw,340px);aspect-ratio:1;border-radius:50%;border:9px solid #fff;box-shadow:0 12px 30px rgba(15,39,71,.18);background:conic-gradient(#f5d98d 0 60deg,#dce8f5 60deg 120deg,#f2c6bd 120deg 180deg,#ccebd7 180deg 240deg,#e2d6f4 240deg 300deg,#f7e6b7 300deg 360deg);position:relative;transition:transform 4s cubic-bezier(.12,.72,.08,1)}
+.wheel-label{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none} .wheel-label span{background:rgba(255,255,255,.9);border-radius:999px;padding:10px 14px;font-weight:900;color:var(--navy)}
+.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0 16px} .legend div{background:#f8fafc;border-radius:12px;padding:8px;font-size:13px;font-weight:800}
+.dice-stage{text-align:center;padding:20px} .dice{width:118px;height:118px;margin:10px auto 18px;background:#fff;border:3px solid var(--navy);border-radius:22px;box-shadow:0 10px 25px rgba(15,39,71,.15);display:grid;place-items:center;font-size:56px;font-weight:900;color:var(--navy);transform-style:preserve-3d}
+.dice.rolling{animation:roll .75s ease-in-out 2} @keyframes roll{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(.82)}100%{transform:rotate(360deg) scale(1)}}
+.challenge-name{font-size:21px;font-weight:900;color:var(--navy);min-height:32px} .hint{font-size:13px;color:var(--muted);line-height:1.7}
+.daily{margin-top:18px;background:linear-gradient(135deg,#0f2747,#1f466f);color:#fff;border-radius:20px;padding:16px} .daily b{color:#f2d77e} .daily p{margin:6px 0 0;line-height:1.7}
+.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+@media(max-width:480px){.hero h1{font-size:25px}.games{grid-template-columns:1fr 1fr}.game-card{min-height:145px;padding:14px 8px}.game-card h3{font-size:16px}.question{font-size:19px}.answer{font-size:15px}.stats{gap:7px}}
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="topbar">
+    <a class="back" href="index.html">← الرئيسية</a>
+    <div class="badge">🏆 مسابقات اجتماع الشباب</div>
+  </div>
+
+  <section id="home" class="hero">
+    <div class="cup">🏆</div>
+    <h1>مسابقات الكتاب المقدس</h1>
+    <p>اختار لعبة، جاوب، اجمع نقاط، وحاول تكسر أفضل نتيجة عندك.</p>
+    <div class="stats">
+      <div class="stat"><b id="questionCount">180</b><span>سؤال وعبارة</span></div>
+      <div class="stat"><b id="bestScore">0</b><span>أفضل نتيجة</span></div>
+      <div class="stat"><b id="totalPlayed">0</b><span>جولات لعبتها</span></div>
+    </div>
+    <div class="daily">
+      <b>🎯 سؤال اليوم</b>
+      <p id="dailyQuestion"></p>
+    </div>
+  </section>
+
+  <div id="gamesTitle" class="section-title">اختار اللعبة</div>
+  <section id="gameMenu" class="games">
+    <button class="game-card" onclick="startQuiz()"><div class="game-icon">📖</div><h3>تحدي الكتاب المقدس</h3><p>10 أسئلة، 4 اختيارات، والنتيجة فورًا.</p></button>
+    <button class="game-card" onclick="startTrueFalse()"><div class="game-icon">✅</div><h3>صح ولا غلط</h3><p>اختار صح أو غلط قبل ما السؤال يتغير.</p></button>
+    <button class="game-card" onclick="showWheel()"><div class="game-icon">🎡</div><h3>العجلة الدوارة</h3><p>Spin واكتشف نوع التحدي اللي هيطلع لك.</p></button>
+    <button class="game-card" onclick="showDice()"><div class="game-icon">🎲</div><h3>مكعب التحدي</h3><p>ارمِ المكعب وكل رقم له نوع سؤال مختلف.</p></button>
+  </section>
+
+  <section id="quizPanel" class="panel">
+    <div class="panel-head"><h2 id="quizTitle">تحدي الكتاب المقدس</h2><button class="small-btn" onclick="goHome()">خروج</button></div>
+    <div class="scoreline"><span id="roundText">السؤال 1 من 10</span><span>⭐ <span id="score">0</span> &nbsp; 🔥 <span id="streak">0</span></span></div>
+    <div class="progress-wrap"><div id="progress" class="progress"></div></div>
+    <div id="question" class="question"></div>
+    <div id="answers" class="answers"></div>
+    <div id="feedback" class="feedback">اختار إجابتك 👇</div>
+  </section>
+
+  <section id="wheelPanel" class="panel">
+    <div class="panel-head"><h2>🎡 العجلة الدوارة</h2><button class="small-btn" onclick="goHome()">خروج</button></div>
+    <div class="wheel-wrap">
+      <div class="pointer"></div>
+      <div id="wheel" class="wheel"><div class="wheel-label"><span id="wheelCenter">SPIN</span></div></div>
+    </div>
+    <div class="legend">
+      <div>📜 العهد القديم</div><div>✝️ العهد الجديد</div>
+      <div>👤 شخصيات</div><div>✨ المعجزات</div>
+      <div>📍 الأماكن</div><div>📖 الآيات</div>
+    </div>
+    <div style="text-align:center"><button id="spinBtn" class="primary" onclick="spinWheel()">لف العجلة 🎡</button></div>
+    <div id="wheelResult" class="feedback">اضغط لف العجلة، وبعدها هتبدأ 5 أسئلة من القسم اللي تختاره العجلة.</div>
+  </section>
+
+  <section id="dicePanel" class="panel">
+    <div class="panel-head"><h2>🎲 مكعب التحدي</h2><button class="small-btn" onclick="goHome()">خروج</button></div>
+    <div class="dice-stage">
+      <div id="dice" class="dice">🎲</div>
+      <div id="challengeName" class="challenge-name">جاهز؟</div>
+      <p class="hint">كل رقم يختار لك تحديًا مختلفًا. بعد الرمية هتجاوب 3 أسئلة.</p>
+      <button id="rollBtn" class="primary" onclick="rollDice()">ارمِ المكعب 🎲</button>
+    </div>
+  </section>
+
+  <div class="footer">اجتماع الشباب العربي، كنيسة الأنبا بيشوي</div>
+</main>
+
+<script>
+const MCQ = [{"q": "من هو أول إنسان خلقه الله؟", "options": ["آدم", "نوح", "إبراهيم", "موسى"], "answer": 0, "category": "العهد القديم", "ref": "تكوين 2: 7"}, {"q": "من هي أول امرأة؟", "options": ["سارة", "حواء", "راحيل", "مريم"], "answer": 1, "category": "العهد القديم", "ref": "تكوين 2: 22"}, {"q": "من بنى الفلك بأمر الله؟", "options": ["إبراهيم", "نوح", "يوسف", "يشوع"], "answer": 1, "category": "العهد القديم", "ref": "تكوين 6: 14"}, {"q": "كم يومًا وليلة أمطرت أثناء الطوفان؟", "options": ["7", "12", "30", "40"], "answer": 3, "category": "العهد القديم", "ref": "تكوين 7: 12"}, {"q": "ما اسم البرج الذي بناه الناس بعد الطوفان؟", "options": ["بابل", "أريحا", "صهيون", "سيناء"], "answer": 0, "category": "العهد القديم", "ref": "تكوين 11"}, {"q": "من هو الابن الذي وُلد لإبراهيم وسارة في شيخوختهما؟", "options": ["إسحاق", "يعقوب", "يوسف", "بنيامين"], "answer": 0, "category": "العهد القديم", "ref": "تكوين 21: 3"}, {"q": "من صار اسمه إسرائيل؟", "options": ["إسحاق", "يعقوب", "يوسف", "موسى"], "answer": 1, "category": "العهد القديم", "ref": "تكوين 32: 28"}, {"q": "كم ابنًا كان ليعقوب؟", "options": ["7", "10", "12", "14"], "answer": 2, "category": "العهد القديم", "ref": "تكوين 35: 22-26"}, {"q": "من بيع عبدًا ثم صار صاحب سلطان في مصر؟", "options": ["يوسف", "داود", "دانيال", "صموئيل"], "answer": 0, "category": "العهد القديم", "ref": "تكوين 37 و41"}, {"q": "أين وُضع موسى وهو طفل؟", "options": ["في سفينة", "في تابوت بين الحلفاء", "في مغارة", "في الهيكل"], "answer": 1, "category": "العهد القديم", "ref": "خروج 2: 3"}, {"q": "من أخرج شعب إسرائيل من مصر؟", "options": ["يشوع", "هارون", "موسى", "جدعون"], "answer": 2, "category": "العهد القديم", "ref": "خروج 12-14"}, {"q": "ما البحر الذي عبره بنو إسرائيل بعد خروجهم من مصر؟", "options": ["بحر الجليل", "البحر الميت", "البحر الأحمر", "البحر المتوسط"], "answer": 2, "category": "العهد القديم", "ref": "خروج 14"}, {"q": "أين استلم موسى الوصايا؟", "options": ["جبل الكرمل", "جبل سيناء", "جبل الزيتون", "جبل تابور"], "answer": 1, "category": "العهد القديم", "ref": "خروج 19-20"}, {"q": "ما الطعام الذي أعطاه الله للشعب في البرية؟", "options": ["المن", "العسل", "العدس", "القمح"], "answer": 0, "category": "العهد القديم", "ref": "خروج 16"}, {"q": "من قاد الشعب بعد موسى؟", "options": ["كالب", "يشوع", "هارون", "صموئيل"], "answer": 1, "category": "العهد القديم", "ref": "يشوع 1"}, {"q": "أي مدينة سقط سورها بعد دوران الشعب حولها؟", "options": ["أورشليم", "بيت لحم", "أريحا", "السامرة"], "answer": 2, "category": "العهد القديم", "ref": "يشوع 6"}, {"q": "من القاضي المعروف بقوته العظيمة؟", "options": ["جدعون", "يفتاح", "شمشون", "عالي"], "answer": 2, "category": "العهد القديم", "ref": "قضاة 13-16"}, {"q": "من كانت حماة راعوث؟", "options": ["حنة", "نعمي", "دبورة", "أستير"], "answer": 1, "category": "العهد القديم", "ref": "راعوث 1"}, {"q": "من كانت أم صموئيل النبي؟", "options": ["حنة", "راعوث", "سارة", "رفقة"], "answer": 0, "category": "العهد القديم", "ref": "1 صموئيل 1"}, {"q": "من هزم جليات؟", "options": ["شاول", "يوناثان", "داود", "سليمان"], "answer": 2, "category": "العهد القديم", "ref": "1 صموئيل 17"}, {"q": "بماذا اشتهر سليمان الملك؟", "options": ["القوة الجسدية", "الحكمة", "السرعة", "الطب"], "answer": 1, "category": "العهد القديم", "ref": "1 ملوك 3"}, {"q": "من تحدى أنبياء البعل على جبل الكرمل؟", "options": ["أليشع", "إيليا", "إشعياء", "إرميا"], "answer": 1, "category": "العهد القديم", "ref": "1 ملوك 18"}, {"q": "من ابتلعه الحوت العظيم؟", "options": ["يونان", "هوشع", "عاموس", "ميخا"], "answer": 0, "category": "العهد القديم", "ref": "يونان 1"}, {"q": "من أُلقي في جب الأسود؟", "options": ["حزقيال", "دانيال", "عزرا", "نحميا"], "answer": 1, "category": "العهد القديم", "ref": "دانيال 6"}, {"q": "من كانت الملكة التي أنقذت شعبها من مؤامرة هامان؟", "options": ["أستير", "راعوث", "دبورة", "ميكال"], "answer": 0, "category": "العهد القديم", "ref": "أستير 7"}, {"q": "من قاد إعادة بناء سور أورشليم؟", "options": ["عزرا", "نحميا", "زربابل", "مردخاي"], "answer": 1, "category": "العهد القديم", "ref": "نحميا 2-6"}, {"q": "أي نبي رأى مركبات نار عند صعود إيليا؟", "options": ["أليشع", "إشعياء", "إرميا", "دانيال"], "answer": 0, "category": "العهد القديم", "ref": "2 ملوك 2"}, {"q": "من طلب علامة الجزة من الله؟", "options": ["جدعون", "شمشون", "داود", "يشوع"], "answer": 0, "category": "العهد القديم", "ref": "قضاة 6"}, {"q": "من دُعي صديق الله؟", "options": ["إبراهيم", "لوط", "يعقوب", "يوسف"], "answer": 0, "category": "العهد القديم", "ref": "يعقوب 2: 23"}, {"q": "من فسّر حلم فرعون عن البقرات والسنابل؟", "options": ["موسى", "يوسف", "هارون", "دانيال"], "answer": 1, "category": "العهد القديم", "ref": "تكوين 41"}, {"q": "أين وُلد السيد المسيح؟", "options": ["الناصرة", "بيت لحم", "أورشليم", "كفرناحوم"], "answer": 1, "category": "العهد الجديد", "ref": "متى 2: 1"}, {"q": "من هي أم السيد المسيح؟", "options": ["أليصابات", "مريم العذراء", "مرثا", "سالومة"], "answer": 1, "category": "العهد الجديد", "ref": "لوقا 1"}, {"q": "من عمّد السيد المسيح؟", "options": ["بطرس", "يوحنا المعمدان", "أندراوس", "يعقوب"], "answer": 1, "category": "العهد الجديد", "ref": "متى 3"}, {"q": "في أي نهر تعمّد السيد المسيح؟", "options": ["النيل", "الفرات", "الأردن", "كيشون"], "answer": 2, "category": "العهد الجديد", "ref": "متى 3: 13"}, {"q": "كم تلميذًا اختار السيد المسيح؟", "options": ["7", "10", "12", "14"], "answer": 2, "category": "العهد الجديد", "ref": "متى 10"}, {"q": "ما أول معجزة صنعها السيد المسيح بحسب إنجيل يوحنا؟", "options": ["إقامة لعازر", "شفاء أعمى", "تحويل الماء إلى خمر", "تهدئة البحر"], "answer": 2, "category": "المعجزات", "ref": "يوحنا 2"}, {"q": "أين صنع السيد المسيح معجزة تحويل الماء إلى خمر؟", "options": ["بيت عنيا", "قانا الجليل", "أريحا", "الناصرة"], "answer": 1, "category": "الأماكن", "ref": "يوحنا 2: 1-11"}, {"q": "بكم رغيف أطعم السيد المسيح نحو خمسة آلاف رجل؟", "options": ["3", "5", "7", "12"], "answer": 1, "category": "المعجزات", "ref": "متى 14: 17-21"}, {"q": "كم سمكة كانت مع الخمسة أرغفة؟", "options": ["1", "2", "5", "7"], "answer": 1, "category": "المعجزات", "ref": "متى 14: 17"}, {"q": "من مشى على الماء نحو السيد المسيح؟", "options": ["يوحنا", "بطرس", "توما", "متى"], "answer": 1, "category": "المعجزات", "ref": "متى 14: 28-29"}, {"q": "كم يومًا كان لعازر في القبر قبل أن يقيمه المسيح؟", "options": ["يومًا واحدًا", "يومين", "3 أيام", "4 أيام"], "answer": 3, "category": "المعجزات", "ref": "يوحنا 11: 39"}, {"q": "ما مهنة زكا؟", "options": ["صياد", "عشار", "نجار", "طبيب"], "answer": 1, "category": "الشخصيات", "ref": "لوقا 19: 2"}, {"q": "لماذا صعد زكا على الجميزة؟", "options": ["ليختبئ", "ليرى يسوع", "ليجمع الثمر", "ليخطب الناس"], "answer": 1, "category": "الشخصيات", "ref": "لوقا 19: 3-4"}, {"q": "من أنكر السيد المسيح ثلاث مرات؟", "options": ["يوحنا", "بطرس", "توما", "فيلبس"], "answer": 1, "category": "الشخصيات", "ref": "متى 26"}, {"q": "بكم من الفضة سلّم يهوذا السيد المسيح؟", "options": ["10", "20", "30", "40"], "answer": 2, "category": "العهد الجديد", "ref": "متى 26: 15"}, {"q": "في أي بستان صلى السيد المسيح قبل القبض عليه؟", "options": ["عدن", "جثسيماني", "الزيتون", "قانا"], "answer": 1, "category": "الأماكن", "ref": "متى 26: 36"}, {"q": "أين صُلب السيد المسيح؟", "options": ["بيت لحم", "الجلجثة", "بيت عنيا", "كفرناحوم"], "answer": 1, "category": "الأماكن", "ref": "يوحنا 19: 17"}, {"q": "في أي يوم قام السيد المسيح من الأموات؟", "options": ["في اليوم الأول", "في اليوم الثاني", "في اليوم الثالث", "بعد أسبوع"], "answer": 2, "category": "العهد الجديد", "ref": "1 كورنثوس 15: 4"}, {"q": "إلى أي قرية كان ذاهبًا التلميذان بعد القيامة؟", "options": ["عمواس", "أريحا", "الناصرة", "قانا"], "answer": 0, "category": "الأماكن", "ref": "لوقا 24: 13"}, {"q": "بعد كم يومًا من القيامة صعد السيد المسيح بحسب سفر الأعمال؟", "options": ["10", "20", "40", "50"], "answer": 2, "category": "العهد الجديد", "ref": "أعمال 1: 3"}, {"q": "ما العيد الذي حل فيه الروح القدس على التلاميذ؟", "options": ["الفصح", "الخمسين", "المظال", "التجديد"], "answer": 1, "category": "العهد الجديد", "ref": "أعمال 2"}, {"q": "ما اسم شاول بعد أن صار رسولًا للأمم؟", "options": ["مرقس", "بولس", "برنابا", "سيلا"], "answer": 1, "category": "الشخصيات", "ref": "أعمال 13: 9"}, {"q": "إلى أي مدينة كان شاول ذاهبًا حين ظهر له الرب؟", "options": ["دمشق", "روما", "أنطاكية", "أفسس"], "answer": 0, "category": "الأماكن", "ref": "أعمال 9"}, {"q": "من كان مع بولس في السجن عندما حدث الزلزال؟", "options": ["بطرس", "سيلا", "مرقس", "برنابا"], "answer": 1, "category": "الشخصيات", "ref": "أعمال 16"}, {"q": "في أي مدينة سُجن بولس وسيلا؟", "options": ["فيلبي", "أثينا", "أورشليم", "كورinthوس"], "answer": 0, "category": "الأماكن", "ref": "أعمال 16"}, {"q": "من كتب سفر أعمال الرسل؟", "options": ["متى", "مرقس", "لوقا", "يوحنا"], "answer": 2, "category": "الأسفار", "ref": "لوقا 1 وأعمال 1"}, {"q": "من كتب سفر الرؤيا؟", "options": ["بطرس", "بولس", "يوحنا", "يعقوب"], "answer": 2, "category": "الأسفار", "ref": "رؤيا 1: 1"}, {"q": "على أي جبل ألقى المسيح الموعظة الشهيرة التي تضم التطويبات؟", "options": ["جبل الكرمل", "الجبل", "جبل سيناء", "جبل جرزيم"], "answer": 1, "category": "العهد الجديد", "ref": "متى 5"}, {"q": "من كان مع المسيح في التجلي؟", "options": ["بطرس ويعقوب ويوحنا", "متى ومرقس ولوقا", "أندراوس وفيلبس وتوما", "الاثنا عشر كلهم"], "answer": 0, "category": "العهد الجديد", "ref": "متى 17: 1"}, {"q": "ما اسم الأعمى الذي ناداه يسوع عند أريحا بحسب مرقس؟", "options": ["بارتيماوس", "نيقوديموس", "لعازر", "سمعان"], "answer": 0, "category": "الشخصيات", "ref": "مرقس 10: 46"}, {"q": "من قدم فلسين في الخزانة؟", "options": ["أرملة فقيرة", "مريم المجدلية", "مرثا", "أليصابات"], "answer": 0, "category": "الشخصيات", "ref": "مرقس 12: 42"}, {"q": "أين قابل السيد المسيح المرأة السامرية؟", "options": ["عند بئر يعقوب", "في الهيكل", "عند بحر الجليل", "في بيت عنيا"], "answer": 0, "category": "الأماكن", "ref": "يوحنا 4"}, {"q": "ما اسم الرجل الذي جاء إلى يسوع ليلًا؟", "options": ["نيقوديموس", "زكا", "يوسف الرامي", "قيافا"], "answer": 0, "category": "الشخصيات", "ref": "يوحنا 3: 1-2"}, {"q": "من ساعد في حمل صليب السيد المسيح؟", "options": ["سمعان القيرواني", "توما", "يوسف الرامي", "برنابا"], "answer": 0, "category": "الشخصيات", "ref": "لوقا 23: 26"}, {"q": "من طلب جسد يسوع بعد الصلب؟", "options": ["نيقوديموس فقط", "يوسف الرامي", "بطرس", "يوحنا"], "answer": 1, "category": "الشخصيات", "ref": "متى 27: 57-58"}, {"q": "من كانت أول من ظهر لها المسيح القائم بحسب إنجيل يوحنا؟", "options": ["مريم المجدلية", "مرثا", "سالومة", "أليصابات"], "answer": 0, "category": "الشخصيات", "ref": "يوحنا 20"}, {"q": "كم سمكة اصطاد التلاميذ في الصيد العجيب بعد القيامة؟", "options": ["100", "120", "153", "200"], "answer": 2, "category": "المعجزات", "ref": "يوحنا 21: 11"}, {"q": "ما البركة التي قال عنها المسيح: طوبى للأنقياء القلب؟", "options": ["لأنهم يعاينون الله", "لأنهم يرثون الأرض", "لأنهم يُشبعون", "لأن لهم الملكوت"], "answer": 0, "category": "الآيات", "ref": "متى 5: 8"}, {"q": "من قال: يا رب إلى من نذهب كلام الحياة الأبدية عندك؟", "options": ["بطرس", "توما", "يوحنا", "فيلبس"], "answer": 0, "category": "الآيات", "ref": "يوحنا 6: 68"}, {"q": "ما الوصية العظمى الأولى؟", "options": ["تحب الرب إلهك", "لا تسرق", "لا تقتل", "أكرم أباك وأمك"], "answer": 0, "category": "الآيات", "ref": "متى 22: 37-38"}, {"q": "ما الاسم الأصلي لبطرس الرسول؟", "options": ["سمعان", "شاول", "لاوي", "يوسف"], "answer": 0, "category": "الشخصيات", "ref": "يوحنا 1: 42"}, {"q": "ما مهنة متى قبل اتباع المسيح؟", "options": ["صياد", "عشار", "نجار", "طبيب"], "answer": 1, "category": "الشخصيات", "ref": "متى 9: 9"}, {"q": "أي تلميذ قال إنه لن يؤمن بالقيامة حتى يرى آثار المسامير؟", "options": ["توما", "فيلبس", "أندراوس", "متى"], "answer": 0, "category": "الشخصيات", "ref": "يوحنا 20: 25"}, {"q": "من رآه يسوع تحت التينة قبل أن يأتي إليه؟", "options": ["نثنائيل", "بطرس", "يعقوب", "توما"], "answer": 0, "category": "الشخصيات", "ref": "يوحنا 1: 48"}, {"q": "من هما أختا لعازر؟", "options": ["مرثا ومريم", "مريم وأليصابات", "حنة ومريم", "دبورة وراعوث"], "answer": 0, "category": "الشخصيات", "ref": "يوحنا 11"}, {"q": "من أول شهيد مسيحي مذكور في سفر الأعمال؟", "options": ["استفانوس", "يعقوب", "بطرس", "بولس"], "answer": 0, "category": "الشخصيات", "ref": "أعمال 7"}, {"q": "من كان يُدعى ابن الوعظ أو التشجيع؟", "options": ["برنابا", "سيلا", "تيموثاوس", "تيطس"], "answer": 0, "category": "الشخصيات", "ref": "أعمال 4: 36"}, {"q": "ما اسم أم تيموثاوس؟", "options": ["أفنيكي", "لوئيس", "ليدية", "دركاس"], "answer": 0, "category": "الشخصيات", "ref": "2 تيموثاوس 1: 5"}, {"q": "ما اسم جدة تيموثاوس؟", "options": ["لوئيس", "أفنيكي", "بريسكلا", "ليدية"], "answer": 0, "category": "الشخصيات", "ref": "2 تيموثاوس 1: 5"}, {"q": "من كانا يصنعان الخيام مع بولس؟", "options": ["أكيلا وبريسكلا", "حنانيا وسفيرة", "فيلبس وأندراوس", "مرقس ولوقا"], "answer": 0, "category": "الشخصيات", "ref": "أعمال 18: 2-3"}, {"q": "من كانت بائعة أرجوان من مدينة ثياتيرا؟", "options": ["ليدية", "دركاس", "بريسكلا", "مريم"], "answer": 0, "category": "الشخصيات", "ref": "أعمال 16: 14"}, {"q": "من كان قائد مئة تقيًا أرسل في طلب بطرس؟", "options": ["كرنيليوس", "فيليكس", "فستوس", "يوليوس"], "answer": 0, "category": "الشخصيات", "ref": "أعمال 10"}, {"q": "أي تلميذ بشّر الخصي الحبشي؟", "options": ["فيلبس", "توما", "متى", "أندراوس"], "answer": 0, "category": "الشخصيات", "ref": "أعمال 8"}, {"q": "من كان طبيبًا ورفيقًا لبولس؟", "options": ["لوقا", "مرقس", "سيلا", "تيطس"], "answer": 0, "category": "الشخصيات", "ref": "كولوسي 4: 14"}, {"q": "من أخو بطرس الرسول؟", "options": ["أندراوس", "فيلبس", "يعقوب", "متى"], "answer": 0, "category": "الشخصيات", "ref": "متى 4: 18"}, {"q": "من هما ابنا زبدي؟", "options": ["يعقوب ويوحنا", "بطرس وأندراوس", "فيلبس وبرثولماوس", "متى وتوما"], "answer": 0, "category": "الشخصيات", "ref": "متى 4: 21"}, {"q": "في أي مدينة تربى السيد المسيح؟", "options": ["الناصرة", "بيت لحم", "أريحا", "بيت عنيا"], "answer": 0, "category": "الأماكن", "ref": "متى 2: 23"}, {"q": "أين كان يعيش لعازر ومرثا ومريم؟", "options": ["بيت عنيا", "كفرناحوم", "قانا", "أريحا"], "answer": 0, "category": "الأماكن", "ref": "يوحنا 11: 1"}, {"q": "ما المدينة التي ارتبطت بزكا؟", "options": ["أريحا", "الناصرة", "بيت لحم", "صور"], "answer": 0, "category": "الأماكن", "ref": "لوقا 19: 1"}, {"q": "أين صعد السيد المسيح إلى السماء بحسب سفر الأعمال؟", "options": ["من ناحية جبل الزيتون", "من جبل سيناء", "من جبل الكرمل", "من جبل جرزيم"], "answer": 0, "category": "الأماكن", "ref": "أعمال 1: 12"}, {"q": "إلى أي بلد هربت العائلة المقدسة من هيرودس؟", "options": ["مصر", "سوريا", "اليونان", "إيطاليا"], "answer": 0, "category": "الأماكن", "ref": "متى 2: 13-14"}, {"q": "في أي بركة شفى المسيح مريض الثماني والثلاثين سنة؟", "options": ["بيت حسدا", "سيلوام", "الأردن", "جبل الزيتون"], "answer": 0, "category": "الأماكن", "ref": "يوحنا 5"}, {"q": "إلى أي بركة أرسل المسيح المولود أعمى ليغتسل؟", "options": ["سيلوام", "بيت حسدا", "الأردن", "كيشون"], "answer": 0, "category": "الأماكن", "ref": "يوحنا 9: 7"}, {"q": "ما أول أسفار الكتاب المقدس؟", "options": ["التكوين", "الخروج", "المزامير", "متى"], "answer": 0, "category": "الأسفار", "ref": "تكوين 1"}, {"q": "ما السفر الذي يروي خروج بني إسرائيل من مصر؟", "options": ["الخروج", "اللاويين", "العدد", "التثنية"], "answer": 0, "category": "الأسفار", "ref": "سفر الخروج"}, {"q": "أي سفر يحتوي على قصة راعوث؟", "options": ["راعوث", "القضاة", "أستير", "صموئيل الأول"], "answer": 0, "category": "الأسفار", "ref": "سفر راعوث"}, {"q": "أي سفر يحتوي على قصة يونان؟", "options": ["يونان", "ناحوم", "ميخا", "عاموس"], "answer": 0, "category": "الأسفار", "ref": "سفر يونان"}, {"q": "أي إنجيل يبدأ بعبارة «في البدء كان الكلمة»؟", "options": ["يوحنا", "متى", "مرقس", "لوقا"], "answer": 0, "category": "الأسفار", "ref": "يوحنا 1: 1"}, {"q": "أي إنجيل يذكر مثل الابن الضال؟", "options": ["لوقا", "متى", "مرقس", "يوحنا"], "answer": 0, "category": "الأسفار", "ref": "لوقا 15"}, {"q": "أي سفر يروي يوم الخمسين وبداية خدمة الرسل؟", "options": ["أعمال الرسل", "رومية", "العبرانيين", "الرؤيا"], "answer": 0, "category": "الأسفار", "ref": "أعمال 2"}, {"q": "ما آخر سفر في العهد الجديد؟", "options": ["الرؤيا", "يهوذا", "أعمال الرسل", "العبرانيين"], "answer": 0, "category": "الأسفار", "ref": "سفر الرؤيا"}, {"q": "من كتب رسالة فليمون؟", "options": ["بولس", "بطرس", "يوحنا", "يعقوب"], "answer": 0, "category": "الأسفار", "ref": "فليمون 1"}, {"q": "ما اسم أول كنيسة ذُكر أن التلاميذ دُعوا فيها مسيحيين؟", "options": ["أنطاكية", "أورشليم", "روما", "أفسس"], "answer": 0, "category": "الأماكن", "ref": "أعمال 11: 26"}, {"q": "أين ألقى بولس خطابه عن الإله المجهول؟", "options": ["أثينا", "روما", "فيلبي", "دمشق"], "answer": 0, "category": "الأماكن", "ref": "أعمال 17"}, {"q": "ما الجزيرة التي تحطمت عندها سفينة بولس؟", "options": ["مالطة", "كريت", "قبرص", "بطمس"], "answer": 0, "category": "الأماكن", "ref": "أعمال 28: 1"}, {"q": "أين كان يوحنا عندما رأى رؤيا سفر الرؤيا؟", "options": ["جزيرة بطمس", "روما", "أفسس", "كريت"], "answer": 0, "category": "الأماكن", "ref": "رؤيا 1: 9"}, {"q": "من أقام المسيح ابنتَه قائلاً لها «طليثا قومي»؟", "options": ["يايرس", "زكا", "كرنيليوس", "نيقوديموس"], "answer": 0, "category": "المعجزات", "ref": "مرقس 5: 41"}, {"q": "من شفى المسيح عبدَه عن بُعد؟", "options": ["قائد المئة", "زكا", "بيلاطس", "هيرودس"], "answer": 0, "category": "المعجزات", "ref": "متى 8: 5-13"}, {"q": "ماذا فعل المسيح للعاصفة في البحر؟", "options": ["هدأ الريح والبحر", "ترك السفينة", "صعد إلى الجبل", "دعا تلاميذ آخرين"], "answer": 0, "category": "المعجزات", "ref": "مرقس 4: 39"}, {"q": "كم قفة امتلأت من الكسر بعد إشباع الخمسة آلاف؟", "options": ["12", "7", "5", "3"], "answer": 0, "category": "المعجزات", "ref": "متى 14: 20"}, {"q": "من أقامه بطرس من الموت في يافا؟", "options": ["طابيثا/دركاس", "حنانيا", "استفانوس", "ليدية"], "answer": 0, "category": "المعجزات", "ref": "أعمال 9: 36-41"}, {"q": "ما المعجزة التي حدثت لبولس وسيلا في السجن؟", "options": ["زلزال وانفتحت الأبواب", "نار من السماء", "شق البحر", "تحول الماء إلى خمر"], "answer": 0, "category": "المعجزات", "ref": "أعمال 16: 26"}, {"q": "أكمل: «الرب راعيَّ فلا...»", "options": ["يعوزني شيء", "أخاف", "أتعثر", "أحزن"], "answer": 0, "category": "الآيات", "ref": "مزمور 23: 1"}, {"q": "أكمل: «كل شيء مستطاع...»", "options": ["للمؤمن", "للغني", "للقوي", "للحكيم"], "answer": 0, "category": "الآيات", "ref": "مرقس 9: 23"}, {"q": "أكمل: «صلوا بلا...»", "options": ["انقطاع", "صوت", "دموع", "تعب"], "answer": 0, "category": "الآيات", "ref": "1 تسالونيكي 5: 17"}, {"q": "أكمل: «الله محبة، ومن يثبت في المحبة...»", "options": ["يثبت في الله", "لا يتعب", "ينجح دائمًا", "لا يخطئ"], "answer": 0, "category": "الآيات", "ref": "1 يوحنا 4: 16"}, {"q": "أكمل: «تعالوا إليّ يا جميع المتعبين والثقيلي الأحمال وأنا...»", "options": ["أريحكم", "أعطيكم ذهبًا", "أرسل لكم ملاكًا", "أجعلكم ملوكًا"], "answer": 0, "category": "الآيات", "ref": "متى 11: 28"}, {"q": "أكمل: «أنا هو الطريق والحق و...»", "options": ["الحياة", "النور", "السلام", "القيامة"], "answer": 0, "category": "الآيات", "ref": "يوحنا 14: 6"}, {"q": "أكمل: «لا تخف لأني...»", "options": ["معك", "أقوى منك", "أعرفك فقط", "في السماء"], "answer": 0, "category": "الآيات", "ref": "إشعياء 41: 10"}, {"q": "أكمل: «طوبى لصانعي السلام لأنهم...»", "options": ["أبناء الله يدعون", "يرثون الأرض", "يشبعون", "يعاينون الله"], "answer": 0, "category": "الآيات", "ref": "متى 5: 9"}];
+const TF = [{"q": "خلق الله السماوات والأرض.", "answer": true, "ref": "تكوين 1: 1"}, {"q": "كان نوح هو الذي بنى برج بابل.", "answer": false, "ref": "تكوين 11"}, {"q": "كان لإسرائيل اثنا عشر ابنًا.", "answer": true, "ref": "تكوين 35"}, {"q": "يوسف هو الذي أخرج الشعب من مصر.", "answer": false, "ref": "الخروج 3-14"}, {"q": "عبر بنو إسرائيل البحر الأحمر.", "answer": true, "ref": "خروج 14"}, {"q": "استلم موسى الوصايا على جبل سيناء.", "answer": true, "ref": "خروج 19-20"}, {"q": "سقطت أسوار أريحا في أيام يشوع.", "answer": true, "ref": "يشوع 6"}, {"q": "كان شمشون معروفًا بحكمته أكثر من قوته.", "answer": false, "ref": "قضاة 13-16"}, {"q": "كانت نعمي حماة راعوث.", "answer": true, "ref": "راعوث 1"}, {"q": "هزم سليمان جليات.", "answer": false, "ref": "1 صموئيل 17"}, {"q": "كان داود راعي غنم قبل أن يصير ملكًا.", "answer": true, "ref": "1 صموئيل 16-17"}, {"q": "تحدى إيليا أنبياء البعل على جبل الكرمل.", "answer": true, "ref": "1 ملوك 18"}, {"q": "أُلقي يونان في جب الأسود.", "answer": false, "ref": "يونان 1 / دانيال 6"}, {"q": "أُلقي دانيال في جب الأسود.", "answer": true, "ref": "دانيال 6"}, {"q": "كانت أستير ملكة.", "answer": true, "ref": "أستير 2"}, {"q": "قاد نحميا بناء سور أورشليم.", "answer": true, "ref": "نحميا 2-6"}, {"q": "وُلد السيد المسيح في الناصرة.", "answer": false, "ref": "متى 2: 1"}, {"q": "وُلد السيد المسيح في بيت لحم.", "answer": true, "ref": "متى 2: 1"}, {"q": "عمّد بطرس السيد المسيح في نهر الأردن.", "answer": false, "ref": "متى 3"}, {"q": "اختار السيد المسيح اثني عشر تلميذًا.", "answer": true, "ref": "متى 10"}, {"q": "كانت أول معجزة في قانا الجليل.", "answer": true, "ref": "يوحنا 2"}, {"q": "أطعم السيد المسيح نحو خمسة آلاف بخمسة أرغفة وسمكتين.", "answer": true, "ref": "متى 14"}, {"q": "بطرس هو التلميذ الذي مشى على الماء نحو المسيح.", "answer": true, "ref": "متى 14"}, {"q": "كان لعازر في القبر يومًا واحدًا فقط.", "answer": false, "ref": "يوحنا 11: 39"}, {"q": "كان زكا صيادًا.", "answer": false, "ref": "لوقا 19: 2"}, {"q": "أنكر بطرس السيد المسيح ثلاث مرات.", "answer": true, "ref": "متى 26"}, {"q": "سلّم يهوذا السيد المسيح بثلاثين من الفضة.", "answer": true, "ref": "متى 26: 15"}, {"q": "صلى المسيح في بستان جثسيماني قبل القبض عليه.", "answer": true, "ref": "متى 26: 36"}, {"q": "قام السيد المسيح في اليوم الثالث.", "answer": true, "ref": "1 كورنثوس 15: 4"}, {"q": "ظهر الرب لشاول وهو في طريقه إلى دمشق.", "answer": true, "ref": "أعمال 9"}, {"q": "كان بولس وسيلا يسبحان في السجن.", "answer": true, "ref": "أعمال 16: 25"}, {"q": "كتب بولس سفر أعمال الرسل.", "answer": false, "ref": "لوقا 1 / أعمال 1"}, {"q": "كتب يوحنا سفر الرؤيا.", "answer": true, "ref": "رؤيا 1"}, {"q": "كان متى عشارًا قبل اتباع المسيح.", "answer": true, "ref": "متى 9: 9"}, {"q": "رفض توما الإيمان بالقيامة حتى يرى.", "answer": true, "ref": "يوحنا 20: 25"}, {"q": "كان لعازر أخًا لمرثا ومريم.", "answer": true, "ref": "يوحنا 11"}, {"q": "كان استفانوس أول شهيد مذكور في سفر الأعمال.", "answer": true, "ref": "أعمال 7"}, {"q": "كان لوقا طبيبًا.", "answer": true, "ref": "كولوسي 4: 14"}, {"q": "كان أندراوس أخًا لبطرس.", "answer": true, "ref": "متى 4: 18"}, {"q": "هربت العائلة المقدسة إلى مصر.", "answer": true, "ref": "متى 2: 13-14"}, {"q": "كانت بيت عنيا موطن لعازر.", "answer": true, "ref": "يوحنا 11: 1"}, {"q": "دُعي التلاميذ مسيحيين أولًا في أنطاكية.", "answer": true, "ref": "أعمال 11: 26"}, {"q": "ألقى بولس خطابه عن الإله المجهول في أثينا.", "answer": true, "ref": "أعمال 17"}, {"q": "تحطمت سفينة بولس قرب مالطة.", "answer": true, "ref": "أعمال 28"}, {"q": "كان يوحنا في جزيرة بطمس عند رؤيا سفر الرؤيا.", "answer": true, "ref": "رؤيا 1: 9"}, {"q": "أقام بطرس طابيثا من الموت.", "answer": true, "ref": "أعمال 9: 36-41"}, {"q": "هدأ السيد المسيح العاصفة في البحر.", "answer": true, "ref": "مرقس 4"}, {"q": "جمع التلاميذ سبع قفف بعد إشباع الخمسة آلاف.", "answer": false, "ref": "متى 14: 20"}, {"q": "قال المسيح: «أنا هو الطريق والحق والحياة».", "answer": true, "ref": "يوحنا 14: 6"}, {"q": "الآية «صلوا بلا انقطاع» موجودة في رسالة تسالونيكي الأولى.", "answer": true, "ref": "1 تسالونيكي 5: 17"}, {"q": "قال المسيح إن الأنقياء القلب يعاينون الله.", "answer": true, "ref": "متى 5: 8"}, {"q": "قال بطرس: «إلى من نذهب كلام الحياة الأبدية عندك».", "answer": true, "ref": "يوحنا 6: 68"}, {"q": "أقيم لعازر في مدينة روما.", "answer": false, "ref": "يوحنا 11"}, {"q": "كان يوحنا المعمدان ابن زكريا وأليصابات.", "answer": true, "ref": "لوقا 1"}, {"q": "كانت مريم المجدلية من أختي لعازر.", "answer": false, "ref": "يوحنا 11 / يوحنا 20"}, {"q": "طلب سليمان من الله الحكمة.", "answer": true, "ref": "1 ملوك 3"}, {"q": "كان دانيال ملكًا على إسرائيل.", "answer": false, "ref": "دانيال"}, {"q": "كان صموئيل ابن حنة.", "answer": true, "ref": "1 صموئيل 1"}, {"q": "كان يوسف الرامي من الذين طلبوا جسد يسوع.", "answer": true, "ref": "متى 27: 57-58"}, {"q": "ذهب التلميذان إلى عمواس بعد القيامة.", "answer": true, "ref": "لوقا 24"}];
+
+const categories = ['العهد القديم','العهد الجديد','الشخصيات','المعجزات','الأماكن','الآيات'];
+const diceMap = [
+  {name:'📜 العهد القديم', category:'العهد القديم'},
+  {name:'✝️ العهد الجديد', category:'العهد الجديد'},
+  {name:'👤 شخصيات', category:'الشخصيات'},
+  {name:'✨ معجزات', category:'المعجزات'},
+  {name:'📍 أماكن', category:'الأماكن'},
+  {name:'📖 آيات', category:'الآيات'}
+];
+
+let game = {mode:'mcq', pool:[], index:0, score:0, streak:0, total:10, locked:false, title:''};
+
+function shuffle(a){const x=[...a];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function loadStats(){
+  const best=Number(localStorage.getItem('youthQuizBest')||0);
+  const played=Number(localStorage.getItem('youthQuizPlayed')||0);
+  document.getElementById('bestScore').textContent=best;
+  document.getElementById('totalPlayed').textContent=played;
+  document.getElementById('questionCount').textContent=MCQ.length+TF.length;
+}
+function updateBest(){
+  const best=Number(localStorage.getItem('youthQuizBest')||0);
+  if(game.score>best)localStorage.setItem('youthQuizBest',game.score);
+  localStorage.setItem('youthQuizPlayed',Number(localStorage.getItem('youthQuizPlayed')||0)+1);
+  loadStats();
+}
+function hideAll(){
+  document.getElementById('home').style.display='none';
+  document.getElementById('gamesTitle').style.display='none';
+  document.getElementById('gameMenu').style.display='none';
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+}
+function goHome(){
+  document.getElementById('home').style.display='block';
+  document.getElementById('gamesTitle').style.display='block';
+  document.getElementById('gameMenu').style.display='grid';
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function startQuiz(category=null,total=10,title='📖 تحدي الكتاب المقدس'){
+  let source=category?MCQ.filter(q=>q.category===category):MCQ;
+  if(source.length<total)source=MCQ;
+  game={mode:'mcq',pool:shuffle(source).slice(0,total),index:0,score:0,streak:0,total,locked:false,title};
+  hideAll();document.getElementById('quizPanel').classList.add('active');document.getElementById('quizTitle').textContent=title;renderQuestion();
+}
+function startTrueFalse(){
+  game={mode:'tf',pool:shuffle(TF).slice(0,10),index:0,score:0,streak:0,total:10,locked:false,title:'✅ صح ولا غلط'};
+  hideAll();document.getElementById('quizPanel').classList.add('active');document.getElementById('quizTitle').textContent=game.title;renderQuestion();
+}
+function renderQuestion(){
+  if(game.index>=game.total){showResult();return}
+  game.locked=false;
+  const q=game.pool[game.index];
+  document.getElementById('roundText').textContent=`السؤال ${game.index+1} من ${game.total}`;
+  document.getElementById('score').textContent=game.score;
+  document.getElementById('streak').textContent=game.streak;
+  document.getElementById('progress').style.width=((game.index/game.total)*100)+'%';
+  document.getElementById('question').textContent=q.q;
+  document.getElementById('feedback').innerHTML='اختار إجابتك 👇';
+  const box=document.getElementById('answers');box.innerHTML='';
+  if(game.mode==='tf'){
+    [['✅ صح',true],['❌ غلط',false]].forEach(([label,val])=>{
+      const b=document.createElement('button');b.className='answer';b.textContent=label;b.onclick=()=>answerTF(b,val,q);box.appendChild(b);
+    });
+  }else{
+    q.options.forEach((opt,i)=>{
+      const b=document.createElement('button');b.className='answer';b.textContent=opt;b.onclick=()=>answerMCQ(b,i,q);box.appendChild(b);
+    });
+  }
+}
+function lockButtons(){document.querySelectorAll('#answers .answer').forEach(b=>b.disabled=true)}
+function nextSoon(){setTimeout(()=>{game.index++;renderQuestion()},2300)}
+function answerMCQ(btn,choice,q){
+  if(game.locked)return;game.locked=true;lockButtons();
+  const buttons=[...document.querySelectorAll('#answers .answer')];
+  buttons[q.answer].classList.add('correct');
+  const good=choice===q.answer;
+  if(!good)btn.classList.add('wrong');
+  if(good){game.score++;game.streak++;document.getElementById('feedback').innerHTML=`✅ إجابة صحيحة!<span class="ref">${q.ref}</span>`}
+  else{game.streak=0;document.getElementById('feedback').innerHTML=`❌ الإجابة الصحيحة: <b>${q.options[q.answer]}</b><span class="ref">${q.ref}</span>`}
+  document.getElementById('score').textContent=game.score;document.getElementById('streak').textContent=game.streak;nextSoon();
+}
+function answerTF(btn,val,q){
+  if(game.locked)return;game.locked=true;lockButtons();
+  const good=val===q.answer;
+  const buttons=[...document.querySelectorAll('#answers .answer')];
+  buttons[q.answer?0:1].classList.add('correct');if(!good)btn.classList.add('wrong');
+  if(good){game.score++;game.streak++;document.getElementById('feedback').innerHTML=`✅ صح!<span class="ref">${q.ref}</span>`}
+  else{game.streak=0;document.getElementById('feedback').innerHTML=`❌ الإجابة الصحيحة: <b>${q.answer?'صح':'غلط'}</b><span class="ref">${q.ref}</span>`}
+  document.getElementById('score').textContent=game.score;document.getElementById('streak').textContent=game.streak;nextSoon();
+}
+function showResult(){
+  updateBest();document.getElementById('progress').style.width='100%';
+  const pct=Math.round((game.score/game.total)*100);
+  let emoji=pct===100?'🏆':pct>=80?'🌟':pct>=60?'👏':'💪';
+  document.getElementById('question').innerHTML='';
+  document.getElementById('answers').innerHTML=`<div class="result"><div class="big">${emoji}</div><h3>${game.score} / ${game.total}</h3><p>${pct===100?'ممتاز! جاوبت كل الأسئلة صح.':pct>=80?'نتيجة قوية جدًا!':pct>=60?'شاطر، جرب مرة تانية وكسر نتيجتك.':'جرب جولة جديدة والأسئلة هتتغير.'}</p><button class="primary" onclick="goHome()">اختار لعبة تانية</button></div>`;
+  document.getElementById('feedback').innerHTML='تم حفظ أفضل نتيجة على جهازك ⭐';
+}
+function showWheel(){hideAll();document.getElementById('wheelPanel').classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+let wheelTurns=0;
+function spinWheel(){
+  const btn=document.getElementById('spinBtn');btn.disabled=true;
+  const idx=Math.floor(Math.random()*categories.length);const slice=60;
+  wheelTurns+=5+Math.floor(Math.random()*3);
+  const target=wheelTurns*360 + (360-(idx*slice+slice/2));
+  document.getElementById('wheel').style.transform=`rotate(${target}deg)`;
+  document.getElementById('wheelCenter').textContent='...';
+  document.getElementById('wheelResult').textContent='العجلة بتلف... 🎡';
+  setTimeout(()=>{
+    const cat=categories[idx];document.getElementById('wheelCenter').textContent='🏆';
+    document.getElementById('wheelResult').innerHTML=`وقفت على: <b>${cat}</b><br>جاهز لـ 5 أسئلة؟`;
+    setTimeout(()=>startQuiz(cat,5,'🎡 '+cat),900);btn.disabled=false;
+  },4100);
+}
+function showDice(){hideAll();document.getElementById('dicePanel').classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function rollDice(){
+  const d=document.getElementById('dice'),btn=document.getElementById('rollBtn');btn.disabled=true;d.classList.add('rolling');
+  let tick=0;const timer=setInterval(()=>{d.textContent=1+Math.floor(Math.random()*6);tick++;if(tick>9)clearInterval(timer)},120);
+  setTimeout(()=>{
+    d.classList.remove('rolling');const n=1+Math.floor(Math.random()*6);d.textContent=n;
+    const ch=diceMap[n-1];document.getElementById('challengeName').textContent=ch.name;
+    setTimeout(()=>startQuiz(ch.category,3,'🎲 '+ch.name),900);btn.disabled=false;
+  },1550);
+}
+function dailyQuestion(){
+  const start=new Date(new Date().getFullYear(),0,0);const diff=new Date()-start;const day=Math.floor(diff/86400000);
+  const q=MCQ[day%MCQ.length];document.getElementById('dailyQuestion').textContent=q.q;
+}
+loadStats();dailyQuestion();
+</script>
+</body>
+</html>

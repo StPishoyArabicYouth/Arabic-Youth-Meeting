@@ -415,6 +415,57 @@ body.light-mode .theme-toggle{
   </div>
 
 </section>
+/* Compact Daily Content */
+.daily-content{
+  gap:8px !important;
+  margin:12px 0 18px !important;
+}
+
+.daily-card{
+  padding:12px 14px !important;
+  border-radius:16px !important;
+}
+
+.daily-title{
+  font-size:18px !important;
+  margin-bottom:6px !important;
+}
+
+.daily-text{
+  font-size:17px !important;
+  line-height:1.55 !important;
+}
+
+.daily-ref{
+  margin-top:4px !important;
+  font-size:14px !important;
+}
+
+.daily-answer-btn{
+  margin-top:8px !important;
+  padding:8px 14px !important;
+  font-size:14px !important;
+}
+
+.daily-answer{
+  margin-top:8px !important;
+  font-size:16px !important;
+}
+
+.daily-card:first-child{
+  animation:dailyFade .8s ease;
+}
+
+@keyframes dailyFade{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
 
   </style>
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>

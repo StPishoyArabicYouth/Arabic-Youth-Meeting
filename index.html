@@ -307,14 +307,11 @@
       gap:8px;font-size:34px;color:var(--navy);
     }
     .media-placeholder span{font-size:15px;font-weight:800}
-    body:not(.light-mode){
-  background:#343a40 !important;
-  color:#f5f5f5 !important;
-}
-
-body:not(.light-mode) .app,
+   body:not(.light-mode),
+body:not(.light-mode) main.app,
 body:not(.light-mode) #homePage{
   background:#343a40 !important;
+  background-image:none !important;
 }
 
 body:not(.light-mode) .hero{
@@ -330,6 +327,7 @@ body:not(.light-mode) .meeting,
 body:not(.light-mode) .daily-card{
   background:#41484f !important;
 }
+
 
 /* Light Mode */
 body.light-mode{

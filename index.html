@@ -415,32 +415,7 @@ body.light-mode .theme-toggle{
   </div>
 
 </section>
-/* Compact Daily Content */
-.daily-content{
-  display:block !important;
-  margin:12px 0 18px !important;
-  background:#202020;
-  border:1px solid rgba(190,145,40,.45);
-  border-radius:18px;
-  overflow:hidden;
-}
 
-.daily-card{
-  background:transparent !important;
-  border:0 !important;
-  border-radius:0 !important;
-  padding:12px 14px !important;
-  box-shadow:none !important;
-}
-
-.daily-card:first-child{
-  border-bottom:1px solid rgba(190,145,40,.30) !important;
-}
-
-body.light-mode .daily-content{
-  background:#ffffff !important;
-  border-color:#d8b458 !important;
-}
 
 
 .daily-title{
@@ -483,6 +458,33 @@ body.light-mode .daily-content{
     transform:translateY(0);
   }
 }
+/* Daily Content - One Compact Card */
+.daily-content{
+  display:block !important;
+  margin:14px 18px 20px !important;
+  background:#202020 !important;
+  border:1px solid rgba(190,145,40,.55) !important;
+  border-radius:18px !important;
+  overflow:hidden !important;
+}
+
+.daily-card{
+  background:transparent !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  padding:12px 14px !important;
+}
+
+.daily-card:first-child{
+  border-bottom:1px solid rgba(190,145,40,.30) !important;
+}
+
+body.light-mode .daily-content{
+ background:#ffffff !important;
+border-color:#d8b458 !important;
+}
+
 
   </style>
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>

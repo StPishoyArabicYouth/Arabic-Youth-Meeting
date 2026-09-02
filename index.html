@@ -516,6 +516,10 @@ notifyButton: {
 <button id="installBtn" style="display:none;margin:16px auto;padding:13px 24px;border:0;border-radius:14px;font-size:18px;font-weight:bold;cursor:pointer;">
   📲 ثبّت التطبيق
 </button>
+       <button id="iosInstallBtn" style="display:none;margin:10px auto 16px;padding:13px 22px;border:0;border-radius:14px;font-size:18px;font-weight:bold;">
+  🍎 ثبّت التطبيق على iPhone
+</button>
+ 
         <button id="shareBtn" style="margin:10px auto 16px;padding:13px 24px;border:0;border-radius:14px;font-size:18px;font-weight:bold;cursor:pointer;display:block;">
   🔗 شارك التطبيق
 </button>
@@ -1065,6 +1069,34 @@ document.getElementById("dailyAnswerBtn").addEventListener("click", function () 
     this.textContent = "إظهار الإجابة";
   }
 });
+</script>
+<script>
+(function () {
+  const iosInstallBtn = document.getElementById('iosInstallBtn');
+  if (!iosInstallBtn) return;
+
+  const isIOS =
+    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  const isInstalled =
+    window.navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches;
+
+  if (isIOS && !isInstalled) {
+    iosInstallBtn.style.display = 'block';
+  }
+
+  iosInstallBtn.addEventListener('click', function () {
+    alert(
+      'لتثبيت التطبيق على iPhone:\n\n' +
+      '1. افتح التطبيق في Safari\n' +
+      '2. اضغط زر المشاركة ⬆️\n' +
+      '3. اختر إضافة إلى الشاشة الرئيسية\n' +
+      '4. اضغط إضافة'
+    );
+  });
+})();
 </script>
 
 </body>

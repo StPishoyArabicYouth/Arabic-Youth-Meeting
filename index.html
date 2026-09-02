@@ -395,6 +395,26 @@ body.light-mode .theme-toggle{
   color:#222;
 }
  
+<section id="dailyContent" class="daily-content">
+
+  <div class="daily-card">
+    <div class="daily-title">📖 آية اليوم</div>
+    <div id="dailyVerseText" class="daily-text"></div>
+    <div id="dailyVerseRef" class="daily-ref"></div>
+  </div>
+
+  <div class="daily-card">
+    <div class="daily-title">🏆 سؤال اليوم</div>
+    <div id="dailyQuestionText" class="daily-text"></div>
+
+    <button id="dailyAnswerBtn" class="daily-answer-btn">
+      إظهار الإجابة
+    </button>
+
+    <div id="dailyAnswerText" class="daily-answer" style="display:none;"></div>
+  </div>
+
+</section>
 
   </style>
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
@@ -462,6 +482,26 @@ notifyButton: {
           <div class="countdown" id="countdown">...</div>
         </div>
       </section>
+<section id="dailyContent" class="daily-content">
+
+  <div class="daily-card">
+    <div class="daily-title">📖 آية اليوم</div>
+    <div id="dailyVerseText" class="daily-text"></div>
+    <div id="dailyVerseRef" class="daily-ref"></div>
+  </div>
+
+  <div class="daily-card">
+    <div class="daily-title">🏆 سؤال اليوم</div>
+    <div id="dailyQuestionText" class="daily-text"></div>
+
+    <button id="dailyAnswerBtn" class="daily-answer-btn">
+      إظهار الإجابة
+    </button>
+
+    <div id="dailyAnswerText" class="daily-answer" style="display:none;"></div>
+  </div>
+
+</section>
 
       <div class="section-title">أقسام الاجتماع</div>
       <section class="grid">
@@ -895,6 +935,66 @@ setInterval(updateAnalogClock, 1000);
       themeToggle.textContent = '☀️';
     }
   });
+</script>
+<script>
+const dailyVerses = [
+  ["لأن الله لم يعطنا روح الفشل بل روح القوة والمحبة والنصح", "2 تيموثاوس 1:7"],
+  ["الرب نوري وخلاصي ممن أخاف", "مزمور 27:1"],
+  ["أستطيع كل شيء في المسيح الذي يقويني", "فيلبي 4:13"],
+  ["توكل على الرب بكل قلبك وعلى فهمك لا تعتمد", "أمثال 3:5"],
+  ["الرب راعي فلا يعوزني شيء", "مزمور 23:1"],
+  ["اطلبوا أولا ملكوت الله وبره وهذه كلها تزاد لكم", "متى 6:33"],
+  ["تشدد وتشجع لا ترهب ولا ترتعب لأن الرب إلهك معك", "يشوع 1:9"],
+  ["قريب هو الرب من المنكسري القلوب", "مزمور 34:18"],
+  ["كل الأشياء تعمل معا للخير للذين يحبون الله", "رومية 8:28"],
+  ["صلوا بلا انقطاع", "1 تسالونيكي 5:17"],
+  ["الله لنا ملجأ وقوة عونا في الضيقات وجد شديدا", "مزمور 46:1"],
+  ["طوبى لأنقياء القلب لأنهم يعاينون الله", "متى 5:8"],
+  ["السماء والأرض تزولان ولكن كلامي لا يزول", "متى 24:35"],
+  ["كونوا لطفاء بعضكم نحو بعض شفوقين متسامحين", "أفسس 4:32"]
+];
+
+const dailyQuestions = [
+  ["من بنى الفلك بأمر الله؟", "نوح"],
+  ["من قاد شعب إسرائيل للخروج من مصر؟", "موسى"],
+  ["من هزم جليات؟", "داود"],
+  ["من ابتلعه الحوت الكبير؟", "يونان"],
+  ["من كان أول تلميذ استشهد من الاثني عشر؟", "يعقوب بن زبدي"],
+  ["كم يوما صام السيد المسيح في البرية؟", "40 يوما"],
+  ["من أنكر السيد المسيح ثلاث مرات؟", "بطرس"],
+  ["في أي مدينة ولد السيد المسيح؟", "بيت لحم"],
+  ["من صعد إلى السماء في مركبة نارية؟", "إيليا"],
+  ["من فسر أحلام فرعون في مصر؟", "يوسف"],
+  ["من عمد السيد المسيح؟", "يوحنا المعمدان"],
+  ["من كتب سفر أعمال الرسل؟", "لوقا"],
+  ["كم تلميذا اختار السيد المسيح؟", "12 تلميذا"],
+  ["من قال للرب: تكلم لأن عبدك سامع؟", "صموئيل"]
+];
+
+const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+const dayNumber = Math.floor(today.getTime() / 86400000);
+
+const verse = dailyVerses[dayNumber % dailyVerses.length];
+const question = dailyQuestions[dayNumber % dailyQuestions.length];
+
+document.getElementById("dailyVerseText").textContent = verse[0];
+document.getElementById("dailyVerseRef").textContent = verse[1];
+
+document.getElementById("dailyQuestionText").textContent = question[0];
+document.getElementById("dailyAnswerText").textContent = "الإجابة: " + question[1];
+
+document.getElementById("dailyAnswerBtn").addEventListener("click", function () {
+  const answer = document.getElementById("dailyAnswerText");
+
+  if (answer.style.display === "none") {
+    answer.style.display = "block";
+    this.textContent = "إخفاء الإجابة";
+  } else {
+    answer.style.display = "none";
+    this.textContent = "إظهار الإجابة";
+  }
+});
 </script>
 
 </body>

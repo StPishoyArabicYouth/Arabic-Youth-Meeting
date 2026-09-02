@@ -417,14 +417,31 @@ body.light-mode .theme-toggle{
 </section>
 /* Compact Daily Content */
 .daily-content{
-  gap:8px !important;
+  display:block !important;
   margin:12px 0 18px !important;
+  background:#202020;
+  border:1px solid rgba(190,145,40,.45);
+  border-radius:18px;
+  overflow:hidden;
 }
 
 .daily-card{
+  background:transparent !important;
+  border:0 !important;
+  border-radius:0 !important;
   padding:12px 14px !important;
-  border-radius:16px !important;
+  box-shadow:none !important;
 }
+
+.daily-card:first-child{
+  border-bottom:1px solid rgba(190,145,40,.30) !important;
+}
+
+body.light-mode .daily-content{
+  background:#ffffff !important;
+  border-color:#d8b458 !important;
+}
+
 
 .daily-title{
   font-size:18px !important;

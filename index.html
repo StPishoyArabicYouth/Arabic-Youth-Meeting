@@ -307,6 +307,77 @@
       gap:8px;font-size:34px;color:var(--navy);
     }
     .media-placeholder span{font-size:15px;font-weight:800}
+/* Light Mode */
+body.light-mode{
+  background:#f4f6f8;
+  color:#1f2937;
+}
+
+body.light-mode .app{
+  background:#f4f6f8;
+}
+
+body.light-mode .hero{
+  background:#ffffff;
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+body.light-mode .now{
+  background:#ffffff !important;
+  color:#1f2937 !important;
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+body.light-mode .now .date,
+body.light-mode .now .time,
+body.light-mode #today,
+body.light-mode #clock,
+body.light-mode #weatherTemp{
+  color:#1f2937 !important;
+}
+
+body.light-mode .meeting{
+  background:#ffffff;
+  color:#1f2937;
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+body.light-mode .tile{
+  background:#ffffff;
+  color:#1f2937;
+  box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3{
+  color:#17345f;
+}
+
+body.light-mode footer{
+  color:#667085;
+}
+   .theme-toggle{
+  position:fixed;
+  top:16px;
+  left:16px;
+  width:46px;
+  height:46px;
+  border:0;
+  border-radius:50%;
+  background:#333;
+  color:white;
+  font-size:24px;
+  cursor:pointer;
+  z-index:9999;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+
+body.light-mode .theme-toggle{
+  background:#ffffff;
+  color:#222;
+}
+ 
 
   </style>
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
@@ -328,6 +399,7 @@ notifyButton: {
 </script>
 </head>
 <body>
+  <button id="themeToggle" class="theme-toggle" aria-label="تغيير لون التطبيق">☀️</button>
   <main class="app">
     <section id="homePage">
       <section class="hero">
@@ -782,6 +854,30 @@ function updateAnalogClock() {
 
 updateAnalogClock();
 setInterval(updateAnalogClock, 1000);
+</script>
+<script>
+  const themeToggle = document.getElementById('themeToggle');
+
+  const savedTheme = localStorage.getItem('appTheme');
+
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+    themeToggle.textContent = '🌙';
+  } else {
+    themeToggle.textContent = '☀️';
+  }
+
+  themeToggle.addEventListener('click', function () {
+    document.body.classList.toggle('light-mode');
+
+    if (document.body.classList.contains('light-mode')) {
+      localStorage.setItem('appTheme', 'light');
+      themeToggle.textContent = '🌙';
+    } else {
+      localStorage.setItem('appTheme', 'dark');
+      themeToggle.textContent = '☀️';
+    }
+  });
 </script>
 
 </body>

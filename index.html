@@ -506,6 +506,34 @@ notifyButton: {
 </script>
 </head>
 <body>
+  <div id="welcomeScreen"
+     style="position:fixed;inset:0;z-index:99999;background:#f5f1e8;display:flex;align-items:center;justify-content:center;text-align:center;direction:rtl;overflow:hidden;">
+
+  <img src="welcome-bg.jpg"
+       alt=""
+       style="position:absolute;width:100%;height:100%;object-fit:cover;opacity:.18;">
+
+  <div style="position:relative;z-index:2;padding:30px 24px;color:#102a4c;width:100%;">
+
+    <div style="font-size:25px;font-weight:700;margin-bottom:28px;">
+      اذكر خالقك في أيام شبابك
+    </div>
+
+    <div style="font-size:32px;font-weight:800;line-height:1.5;">
+      اجتماع الشبان والشابات بالعربي
+    </div>
+
+    <div style="font-size:23px;font-weight:700;margin-top:14px;">
+      كنيسة الأنبا بيشوي
+    </div>
+
+    <div style="font-size:27px;font-weight:800;margin-top:32px;">
+      يرحب بكم
+    </div>
+
+  </div>
+</div>
+
   <button id="themeToggle" class="theme-toggle" aria-label="تغيير لون التطبيق">☀️</button>
   <main class="app">
     <section id="homePage">
@@ -1132,6 +1160,21 @@ document.getElementById("dailyAnswerBtn").addEventListener("click", function () 
       '4. اضغط إضافة'
     );
   });
+})();
+</script>
+<script>
+(function () {
+  const welcome = document.getElementById('welcomeScreen');
+  if (!welcome) return;
+
+  setTimeout(function () {
+    welcome.style.transition = 'opacity .55s ease';
+    welcome.style.opacity = '0';
+
+    setTimeout(function () {
+      welcome.style.display = 'none';
+    }, 550);
+  }, 2000);
 })();
 </script>
 

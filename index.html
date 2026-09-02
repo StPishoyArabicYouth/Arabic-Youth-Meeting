@@ -706,11 +706,36 @@ notifyButton: {
     program:{
       icon:'🗓️', title:'برنامج الاجتماع', subtitle:'برنامج الاجتماع الشهري',
       html:`
-        <div class="timeline">
-          <div class="timeline-item"><b>6:00 مساءً</b><span>بداية الاجتماع</span></div>
-          <div class="timeline-item"><b>حتى 9:00 مساءً</b><span>برنامج الاجتماع</span></div>
-        </div>
-        <div class="small-note">يمكن إضافة تفاصيل برنامج كل شهر هنا عند تجهيزها.</div>`
+     <div style="border:1px solid rgba(190,145,40,.45);border-radius:18px;overflow:hidden;margin-top:12px;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(190,145,40,.22);">
+    <span>👥 التجمع</span>
+    <b>6:00 - 6:15 مساءً</b>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(190,145,40,.22);">
+    <span>🙏 الصلاة</span>
+    <b>6:15 - 6:45 مساءً</b>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(190,145,40,.22);">
+    <span>🎵 الترانيم</span>
+    <b>6:45 - 7:00 مساءً</b>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(190,145,40,.22);">
+    <span>📖 العظة</span>
+    <b>7:00 - 7:45 مساءً</b>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;">
+    <span>🍽️ أغابي</span>
+    <b>7:45 - 9:00 مساءً</b>
+  </div>
+
+</div>
+`
+
     },
     trips:{
       icon:'🚌', title:'الرحلات والمؤتمرات', subtitle:'الرحلات والمؤتمرات القادمة',

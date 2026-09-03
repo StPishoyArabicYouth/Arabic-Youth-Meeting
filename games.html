@@ -391,14 +391,15 @@ function finishQuiz(){
 }
 
 function continueGame(){
-  if(game.mode === 'multiplayer'){
-    if(window.continueMultiplayerGame){
-      window.continueMultiplayerGame();
-    }
-  }else{
-    startQuiz();
+  if(window.currentMultiplayerRoom && window.continueMultiplayerGame){
+    window.continueMultiplayerGame();
+    return;
   }
+
+  startQuiz();
 }
+
+
 function answerMCQ(btn,choice,q){
   if(game.locked)return;game.locked=true;lockButtons();
   const buttons=[...document.querySelectorAll('#answers .answer')];

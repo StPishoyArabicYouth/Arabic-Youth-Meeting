@@ -347,7 +347,45 @@ function renderQuestion(){
   }
 }
 function lockButtons(){document.querySelectorAll('#answers .answer').forEach(b=>b.disabled=true)}
-function nextSoon(){setTimeout(()=>{game.index++;renderQuestion()},2300)}
+function nextSoon(){
+  setTimeout(()=>{
+    if(game.index + 1 >= game.pool.length){
+      finishQuiz();
+      return;
+    }
+
+    game.index++;
+    renderQuestion();
+  },900);
+}
+
+function finishQuiz(){
+  if (window.multiplayerStarted && window.submitMultiplayerResult) {
+  window.submitMultiplayerResult(game.score, game.pool.length);
+  return;
+}
+
+  document.getElementById('question').textContent =
+    '🎉 انتهت الـ 10 أسئلة';
+
+  document.getElementById('feedback').innerHTML =
+    'نتيجتك: <b>' + game.score + ' من ' + game.pool.length + '</b>';
+
+  document.getElementById('answers').innerHTML = `
+    <button onclick="continueGame()">🔄 تكملة المسابقة</button>
+    <button onclick="showMenu()">🏠 بداية جديدة</button>
+  `;
+}
+
+function continueGame(){
+  if(game.mode === 'multiplayer'){
+    if(window.continueMultiplayerGame){
+      window.continueMultiplayerGame();
+    }
+  }else{
+    startQuiz();
+  }
+}
 function answerMCQ(btn,choice,q){
   if(game.locked)return;game.locked=true;lockButtons();
   const buttons=[...document.querySelectorAll('#answers .answer')];
@@ -488,6 +526,9 @@ window.joinGameRoom = joinGameRoom;
   try {
     status.textContent = "جاري إنشاء التحدي...";
     const code = await window.createGameRoom();
+window.currentMultiplayerRoom = code;
+    window.currentMultiplayerRound = null;
+window.multiplayerStarted = false;
 
     display.textContent = "كود الغرفة: " + code;
     status.textContent = "في انتظار اللاعب الثاني...";
@@ -507,10 +548,16 @@ onValue(roomRef, (snapshot) => {
   });
 }
 
-if (room && room.questions && !window.multiplayerStarted) {
-  window.multiplayerStarted = true;
-  startMultiplayerQuiz(room.questions);
+if (room && room.questions) {
+  const round = room.round || 1;
+
+  if (window.currentMultiplayerRound !== round) {
+    window.currentMultiplayerRound = round;
+    window.multiplayerStarted = true;
+    startMultiplayerQuiz(room.questions);
+  }
 }
+
 });
   } catch (error) {
     console.error(error);
@@ -530,22 +577,119 @@ if (room && room.questions && !window.multiplayerStarted) {
   try {
     status.textContent = "جاري الدخول...";
     await window.joinGameRoom(code);
+    window.currentMultiplayerRoom = code;
+    window.currentMultiplayerRound = null;
+window.multiplayerStarted = false;
+
     status.textContent = "تم الدخول للتحدي ✅";
     const roomRef = ref(db, "rooms/" + code);
 
 onValue(roomRef, (snapshot) => {
   const room = snapshot.val();
 
-  if (room && room.questions && !window.multiplayerStarted) {
+  if (room && room.questions) {
+  const round = room.round || 1;
+
+  if (window.currentMultiplayerRound !== round) {
+    window.currentMultiplayerRound = round;
     window.multiplayerStarted = true;
     startMultiplayerQuiz(room.questions);
   }
+}
+
 });
   } catch (error) {
     console.error(error);
     status.textContent = "كود الغرفة غير صحيح";
   }
 };
+    window.submitMultiplayerResult = async function(score, total) {
+  const code = window.currentMultiplayerRoom;
+  const user = auth.currentUser;
+
+  if (!code || !user) return;
+
+  const resultRef = ref(db, "rooms/" + code + "/results/" + user.uid);
+
+  await set(resultRef, {
+    score: score,
+    total: total,
+    finishedAt: Date.now()
+  });
+
+  document.getElementById("question").textContent = "⏳ في انتظار نتيجة اللاعب الثاني...";
+  document.getElementById("answers").innerHTML = "";
+
+  const resultsRef = ref(db, "rooms/" + code + "/results");
+
+  onValue(resultsRef, (snapshot) => {
+    const results = snapshot.val();
+
+    if (!results || Object.keys(results).length < 2) return;
+
+    const players = Object.entries(results);
+    const myResult = results[user.uid];
+    const other = players.find(([uid]) => uid !== user.uid);
+
+    if (!other) return;
+
+    const otherResult = other[1];
+
+    let winnerText = "🤝 تعادل";
+
+    if (myResult.score > otherResult.score) {
+      winnerText = "🏆 أنت الفائز";
+    } else if (myResult.score < otherResult.score) {
+      winnerText = "👏 اللاعب الثاني هو الفائز";
+    }
+
+    document.getElementById("question").textContent = winnerText;
+
+    document.getElementById("feedback").innerHTML =
+      "نتيجتك: <b>" + myResult.score + " من " + total + "</b><br>" +
+      "نتيجة اللاعب الثاني: <b>" + otherResult.score + " من " + total + "</b>";
+
+    document.getElementById("answers").innerHTML = `
+      <button onclick="continueGame()">🔄 تكملة المسابقة</button>
+      <button onclick="showMenu()">🏠 بداية جديدة</button>
+    `;
+  });
+};
+window.continueMultiplayerGame = async function () {
+  const code = window.currentMultiplayerRoom;
+  const user = auth.currentUser;
+
+  if (!code || !user) return;
+
+  const roomRef = ref(db, "rooms/" + code);
+  const snapshot = await get(roomRef);
+
+  if (!snapshot.exists()) return;
+
+  const room = snapshot.val();
+
+  if (user.uid !== room.host) {
+    document.getElementById("question").textContent =
+      "⏳ في انتظار اللاعب الأول لبدء الجولة الجديدة";
+    return;
+  }
+
+  const newQuestions = uniquePick(
+    MCQ,
+    10,
+    "multiplayer_continue_" + code + "_" + Date.now()
+  );
+
+  window.multiplayerStarted = false;
+
+  await update(roomRef, {
+    questions: newQuestions,
+    results: null,
+    status: "playing",
+    round: (room.round || 1) + 1
+  });
+};
+
 </script>
 </body>
 </html>

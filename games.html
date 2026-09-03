@@ -301,6 +301,7 @@ function startQuiz(category=null,total=10,title='📖 تحدي الكتاب ال
   renderQuestion();
 }
   function startMultiplayerQuiz(pool) {
+    pool = Array.isArray(pool) ? pool : Object.values(pool);
   game = {
     mode: 'mcq',
     pool: pool,

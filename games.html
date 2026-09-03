@@ -367,7 +367,7 @@ document.getElementById('soundToggle').textContent=soundOn?'🔊 الصوت':'�
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-import { getDatabase, ref, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+import { getDatabase, ref,get, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -389,6 +389,49 @@ const db = getDatabase(app);
 
 signInAnonymously(auth)
   .catch((error) => console.error("Anonymous login error:", error));
+    function makeRoomCode() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+   async function createGameRoom() {
+  const user = auth.currentUser || (await signInAnonymously(auth)).user;
+
+  let code = makeRoomCode();
+  let roomRef = ref(db, "rooms/" + code);
+
+  while ((await get(roomRef)).exists()) {
+    code = makeRoomCode();
+    roomRef = ref(db, "rooms/" + code);
+  }
+
+  await set(roomRef, {
+    host: user.uid,
+    guest: "",
+    status: "waiting"
+  });
+
+  return code;
+}
+    async function joinGameRoom(code) {
+  const user = auth.currentUser || (await signInAnonymously(auth)).user;
+
+  code = String(code).trim();
+
+  const roomRef = ref(db, "rooms/" + code);
+  const snapshot = await get(roomRef);
+
+  if (!snapshot.exists()) {
+    throw new Error("ROOM_NOT_FOUND");
+  }
+
+  await update(roomRef, {
+    guest: user.uid,
+    status: "ready"
+  });
+
+  return code;
+}
+   window.createGameRoom = createGameRoom;
+window.joinGameRoom = joinGameRoom; 
 </script>
 </body>
 </html>

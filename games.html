@@ -100,11 +100,40 @@ body{margin:0;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(180
 
   <div id="gamesTitle" class="section-title">اختار اللعبة</div>
   <section id="gameMenu" class="games">
+    <button class="game-card" onclick="showMultiplayer()">
+  <div class="game-icon">🎮</div>
+  <div>
+    <b>تحدي لاعبين</b>
+    <span>العب مع صديق بنفس الأسئلة</span>
+  </div>
+</button>
     <button class="game-card" onclick="chooseLevel('mcq')"><div class="game-icon">📖</div><h3>تحدي الكتاب المقدس</h3><p>10 أسئلة، 4 اختيارات، والنتيجة فورًا.</p></button>
     <button class="game-card" onclick="chooseLevel('tf')"><div class="game-icon">✅</div><h3>صح ولا غلط</h3><p>اختار صح أو غلط قبل ما السؤال يتغير.</p></button>
     <button class="game-card" onclick="showWheel()"><div class="game-icon">🎡</div><h3>العجلة الدوارة</h3><p>Spin واكتشف نوع التحدي اللي هيطلع لك.</p></button>
     <button class="game-card" onclick="showDice()"><div class="game-icon">🎲</div><h3>مكعب التحدي</h3><p>ارمِ المكعب وكل رقم له نوع سؤال مختلف.</p></button>
   </section>
+  <section id="multiplayerPanel" class="panel" style="display:none;">
+  <div class="panel-head">
+    <h2>🎮 تحدي لاعبين</h2>
+    <button class="small" onclick="showMenu()">رجوع</button>
+  </div>
+
+  <div class="question">
+    <button onclick="handleCreateRoom()">إنشاء تحدي جديد</button>
+
+    <p id="roomCodeDisplay"></p>
+
+    <input id="roomCodeInput"
+           type="text"
+           inputmode="numeric"
+           maxlength="6"
+           placeholder="اكتب كود الغرفة">
+
+    <button onclick="handleJoinRoom()">دخول التحدي</button>
+
+    <p id="multiplayerStatus"></p>
+  </div>
+</section>
 
   <section id="levelPanel" class="panel">
     <div class="panel-head"><h2 id="levelTitle">اختار مستوى التحدي</h2><button class="small-btn" onclick="goHome()">خروج</button></div>
@@ -432,6 +461,45 @@ signInAnonymously(auth)
 }
    window.createGameRoom = createGameRoom;
 window.joinGameRoom = joinGameRoom; 
+    window.showMultiplayer = function () {
+  document.getElementById("gameMenu").style.display = "none";
+  document.getElementById("gamesTitle").style.display = "none";
+  document.getElementById("multiplayerPanel").style.display = "block";
+};
+   window.handleCreateRoom = async function () {
+  const status = document.getElementById("multiplayerStatus");
+  const display = document.getElementById("roomCodeDisplay");
+
+  try {
+    status.textContent = "جاري إنشاء التحدي...";
+    const code = await window.createGameRoom();
+
+    display.textContent = "كود الغرفة: " + code;
+    status.textContent = "في انتظار اللاعب الثاني...";
+  } catch (error) {
+    console.error(error);
+    status.textContent = "حصل خطأ في إنشاء التحدي";
+  }
+};
+    window.handleJoinRoom = async function () {
+  const input = document.getElementById("roomCodeInput");
+  const status = document.getElementById("multiplayerStatus");
+  const code = input.value.trim();
+
+  if (code.length !== 6) {
+    status.textContent = "اكتب كود الغرفة المكون من 6 أرقام";
+    return;
+  }
+
+  try {
+    status.textContent = "جاري الدخول...";
+    await window.joinGameRoom(code);
+    status.textContent = "تم الدخول للتحدي ✅";
+  } catch (error) {
+    console.error(error);
+    status.textContent = "كود الغرفة غير صحيح";
+  }
+};
 </script>
 </body>
 </html>

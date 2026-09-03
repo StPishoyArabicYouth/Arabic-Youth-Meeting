@@ -735,24 +735,26 @@ notifyButton: {
   setInterval(updateClock,1000);
 
   const pages = {
-    meeting:{
-  icon:'📰', title:'أخبار الكنيسة', subtitle:'آخر أخبار الكنيسة والتنبيهات',      html:`
-        <div class="info-card featured">
-<div class="big-label">📅 الجدول الأسبوعي للكنيسة</div>
-<img src="weekly-schedule.jpg" alt="الجدول الأسبوعي للكنيسة" style="width:100%;height:auto;border-radius:14px;margin-top:12px;">
-<div class="line">تابع الجدول لمعرفة مواعيد القداسات والاجتماعات والأنشطة هذا الأسبوع</div>
+meeting:{
+  icon:'📰',
+  title:'أخبار الكنيسة',
+  subtitle:'آخر أخبار الكنيسة والتنبيهات',
+  html:`
+    <div class="info-card featured">
+      <div class="big-label">📅 الجدول الأسبوعي للكنيسة</div>
+      <img src="weekly-schedule.jpg" alt="الجدول الأسبوعي للكنيسة" style="width:100%;height:auto;border-radius:14px;margin-top:12px;">
+      <div class="line">تابع الجدول لمعرفة مواعيد القداسات والاجتماعات والأنشطة هذا الأسبوع</div>
+    </div>
 
-  <div class="line">تابع هذه الصفحة لمعرفة آخر الأخبار والتنبيهات</div>
-</div>
+    <div class="info-card">
+      <h3>📌 تنبيهات الكنيسة</h3>
+      <p>سيتم إضافة الأخبار والمواعيد المهمة هنا</p>
+      <p id="insideMeetingDate" style="display:none;"></p>
+      <p id="insideCountdown" style="display:none;"></p>
+    </div>
+  `
+},
 
-<div class="info-card">
-  <h3>📌 تنبيهات الكنيسة</h3>
-  <p>سيتم إضافة الأخبار والمواعيد المهمة هنا</p>
-  <p id="insideMeetingDate" style="display:none;"></p>
-  <p id="insideCountdown" style="display:none;"></p>
-</div>
-
-    },
     announcements:{
       icon:'📣', title:'الإعلانات', subtitle:'آخر أخبار وإعلانات الاجتماع',
       html:`

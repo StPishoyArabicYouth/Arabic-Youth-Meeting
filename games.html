@@ -663,8 +663,7 @@ onValue(roomRef, (snapshot) => {
       "نتيجة اللاعب الثاني: <b>" + otherResult.score + " من " + total + "</b>";
 
     document.getElementById("answers").innerHTML = `
-      <button onclick="continueGame()">🔄 تكملة المسابقة</button>
-      <button onclick="showMenu()">🏠 بداية جديدة</button>
+<button onclick="window.continueMultiplayerGame()">🔄 تكملة المسابقة</button>      <button onclick="showMenu()">🏠 بداية جديدة</button>
     `;
   });
 };

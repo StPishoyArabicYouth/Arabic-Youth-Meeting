@@ -363,5 +363,32 @@ function dailyQuestion(){
 }
 document.getElementById('soundToggle').textContent=soundOn?'🔊 الصوت':'🔇 الصوت';document.getElementById('questionCount').textContent=MCQ.length+TF.length;loadStats();dailyQuestion();
 </script>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import { getDatabase, ref, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAAg5nw0h8gLKgW3Yo_hhFYI2it909C2QM",
+    authDomain: "arabic-youth-meeting-game.firebaseapp.com",
+    databaseURL: "https://arabic-youth-meeting-game-default-rtdb.firebaseio.com",
+    projectId: "arabic-youth-meeting-game",
+    storageBucket: "arabic-youth-meeting-game.firebasestorage.app",
+    messagingSenderId: "543063628762",
+    appId: "1:543063628762:web:fe6a0c7e9fb2cf2bff3ee3"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+const db = getDatabase(app);
+
+signInAnonymously(auth)
+  .catch((error) => console.error("Anonymous login error:", error));
+</script>
 </body>
 </html>

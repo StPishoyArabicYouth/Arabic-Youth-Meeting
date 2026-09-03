@@ -635,8 +635,7 @@ notifyButton: {
 
       <div class="section-title">أقسام الاجتماع</div>
       <section class="grid">
-        <button class="tile" data-page="meeting"><span class="icon">📅</span><span>موعد الاجتماع</span></button>
-        <button class="tile" data-page="announcements"><span class="icon">📣</span><span>الإعلانات</span></button>
+        <button class="tile" data-page="meeting"><span class="icon">📰</span><span>أخبار الكنيسة</span></button>        <button class="tile" data-page="announcements"><span class="icon">📣</span><span>الإعلانات</span></button>
         <button class="tile" data-page="program"><span class="icon">🗓️</span><span>برنامج الاجتماع</span></button>
         <button class="tile" data-page="trips"><span class="icon">🚌</span><span>الرحلات والمؤتمرات</span></button>
         <button class="tile" data-page="hymns"><span class="icon">🎵</span><span>الترانيم</span></button>
@@ -737,18 +736,20 @@ notifyButton: {
 
   const pages = {
     meeting:{
-      icon:'📅', title:'موعد الاجتماع', subtitle:'موعد اجتماع الشباب الشهري',
-      html:`
+  icon:'📰', title:'أخبار الكنيسة', subtitle:'آخر أخبار الكنيسة والتنبيهات',      html:`
         <div class="info-card featured">
-          <div class="big-label">اجتماع الشباب العربي</div>
-          <div class="big-value">أول أحد من كل شهر</div>
-          <div class="line">من 6:00 مساءً إلى 9:00 مساءً</div>
-        </div>
-        <div class="info-card">
-          <h3>الاجتماع القادم</h3>
-          <p id="insideMeetingDate"></p>
-          <p class="gold-text" id="insideCountdown"></p>
-        </div>`
+  <div class="big-label">📰 أخبار الكنيسة</div>
+  <div class="big-value">لا توجد أخبار جديدة حالياً</div>
+  <div class="line">تابع هذه الصفحة لمعرفة آخر الأخبار والتنبيهات</div>
+</div>
+
+<div class="info-card">
+  <h3>📌 تنبيهات الكنيسة</h3>
+  <p>سيتم إضافة الأخبار والمواعيد المهمة هنا</p>
+  <p id="insideMeetingDate" style="display:none;"></p>
+  <p id="insideCountdown" style="display:none;"></p>
+</div>
+
     },
     announcements:{
       icon:'📣', title:'الإعلانات', subtitle:'آخر أخبار وإعلانات الاجتماع',
@@ -764,6 +765,7 @@ notifyButton: {
   title:'برنامج الاجتماع',
   subtitle:'برنامج الاجتماع الشهري',
   html:`
+  <div style="text-align:center;margin-bottom:14px;font-weight:700;">الأحد الأول من كل شهر — من <span dir="ltr">6:00</span> إلى <span dir="ltr">9:00</span> مساءً</div>
     <div style="border:1px solid rgba(190,145,40,.45);border-radius:18px;overflow:hidden;margin-top:12px;">
 
       <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 15px;border-bottom:1px solid rgba(190,145,40,.22);">

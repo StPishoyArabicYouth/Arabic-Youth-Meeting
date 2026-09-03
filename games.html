@@ -476,6 +476,15 @@ window.joinGameRoom = joinGameRoom;
 
     display.textContent = "كود الغرفة: " + code;
     status.textContent = "في انتظار اللاعب الثاني...";
+    const roomRef = ref(db, "rooms/" + code);
+
+onValue(roomRef, (snapshot) => {
+  const room = snapshot.val();
+
+  if (room && room.status === "ready" && room.guest) {
+    status.textContent = "اللاعب الثاني دخل ✅";
+  }
+});
   } catch (error) {
     console.error(error);
     status.textContent = "حصل خطأ في إنشاء التحدي";

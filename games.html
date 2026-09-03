@@ -147,7 +147,7 @@ body{margin:0;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(180
   </section>
 
   <section id="quizPanel" class="panel">
-    <div class="panel-head"><h2 id="quizTitle">تحدي الكتاب المقدس</h2><button class="small-btn" onclick="goHome()">خروج</button></div>
+    <div class="panel-head"><h2 id="quizTitle">تحدي الكتاب المقدس</h2><button class="small-btn" onclick="window.leaveGame()">خروج</button></div>
     <div class="scoreline"><span id="roundText">السؤال 1 من 10</span><span>⭐ <span id="score">0</span> &nbsp; 🔥 <span id="streak">0</span></span></div>
     <div style="text-align:center"><span id="difficultyChip" class="level-chip">⭐ مستوى متنوع</span></div>
     <div class="progress-wrap"><div id="progress" class="progress"></div></div>
@@ -463,8 +463,7 @@ document.getElementById('soundToggle').textContent=soundOn?'🔊 الصوت':'�
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-import { getDatabase, ref,get, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
-  // TODO: Add SDKs for Firebase products that you want to use
+import { getDatabase, ref, get, set, onValue, update, remove, onDisconnect } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";  // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
   // Your web app's Firebase configuration
@@ -541,6 +540,7 @@ window.joinGameRoom = joinGameRoom;
     status.textContent = "جاري إنشاء التحدي...";
     const code = await window.createGameRoom();
 window.currentMultiplayerRoom = code;
+    window.setupMultiplayerPresence(code);
     window.currentMultiplayerRound = null;
 window.multiplayerStarted = false;
 
@@ -591,6 +591,7 @@ if (room && room.questions) {
     status.textContent = "جاري الدخول...";
     await window.joinGameRoom(code);
     window.currentMultiplayerRoom = code;
+    window.setupMultiplayerPresence(code);
     window.currentMultiplayerRound = null;
 window.multiplayerStarted = false;
 
@@ -701,6 +702,66 @@ window.continueMultiplayerGame = async function () {
     status: "playing",
     round: (room.round || 1) + 1
   });
+};
+window.setupMultiplayerPresence = async function(code) {
+  const user = auth.currentUser || (await signInAnonymously(auth)).user;
+
+  const presenceRef = ref(db, "rooms/" + code + "/presence");
+  const myPresenceRef = ref(db, "rooms/" + code + "/presence/" + user.uid);
+
+  await onDisconnect(myPresenceRef).set(false);
+  await set(myPresenceRef, true);
+
+  let bothWerePresent = false;
+  let alertShown = false;
+
+  onValue(presenceRef, (snapshot) => {
+    const presence = snapshot.val() || {};
+    const onlineCount = Object.values(presence)
+      .filter(value => value === true).length;
+
+    if (onlineCount >= 2) {
+      bothWerePresent = true;
+      alertShown = false;
+      return;
+    }
+
+    if (bothWerePresent && onlineCount < 2 && !alertShown) {
+      alertShown = true;
+
+      const question = document.getElementById("question");
+      const answers = document.getElementById("answers");
+      const status = document.getElementById("multiplayerStatus");
+
+      if (question) {
+        question.textContent = "⚠️ اللاعب الآخر انسحب من التحدي";
+      }
+
+      if (answers) {
+        answers.innerHTML =
+          '<button onclick="showMenu()">🏠 العودة للقائمة</button>';
+      }
+
+      if (status) {
+        status.textContent = "⚠️ اللاعب الآخر انسحب من التحدي";
+      }
+    }
+  });
+};
+window.leaveGame = async function() {
+  const code = window.currentMultiplayerRoom;
+  const user = auth.currentUser;
+
+  if (code && user) {
+    await set(
+      ref(db, "rooms/" + code + "/presence/" + user.uid),
+      false
+    );
+
+    window.currentMultiplayerRoom = null;
+  }
+
+  goHome();
 };
 
 </script>

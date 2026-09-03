@@ -300,6 +300,21 @@ function startQuiz(category=null,total=10,title='📖 تحدي الكتاب ال
   document.getElementById('difficultyChip').textContent=difficultyLabel(difficulty);
   renderQuestion();
 }
+  function startMultiplayerQuiz(pool) {
+  game = {
+    mode: 'mcq',
+    pool: pool,
+    index: 0,
+    score: 0,
+    streak: 0
+  };
+
+  hideAll();
+  document.getElementById('quizPanel').classList.add('active');
+  document.getElementById('quizTitle').textContent = '🎮 تحدي لاعبين';
+  document.getElementById('difficultyChip').textContent = 'نفس الأسئلة للاعبين';
+  renderQuestion();
+}
 function startTrueFalse(difficulty='mixed'){
   let source=withDifficulty(TF,difficulty);
   if(source.length<10){source=TF;difficulty='mixed'}
@@ -481,9 +496,21 @@ window.joinGameRoom = joinGameRoom;
 onValue(roomRef, (snapshot) => {
   const room = snapshot.val();
 
-  if (room && room.status === "ready" && room.guest) {
-    status.textContent = "اللاعب الثاني دخل ✅";
-  }
+  if (room && room.status === "ready" && room.guest && !room.questions) {
+  status.textContent = "اللاعب الثاني دخل ✅";
+
+  const questions = uniquePick(MCQ, 10, "multiplayer_" + code);
+
+  update(roomRef, {
+    questions: questions,
+    status: "playing"
+  });
+}
+
+if (room && room.questions && !window.multiplayerStarted) {
+  window.multiplayerStarted = true;
+  startMultiplayerQuiz(room.questions);
+}
 });
   } catch (error) {
     console.error(error);
@@ -504,6 +531,16 @@ onValue(roomRef, (snapshot) => {
     status.textContent = "جاري الدخول...";
     await window.joinGameRoom(code);
     status.textContent = "تم الدخول للتحدي ✅";
+    const roomRef = ref(db, "rooms/" + code);
+
+onValue(roomRef, (snapshot) => {
+  const room = snapshot.val();
+
+  if (room && room.questions && !window.multiplayerStarted) {
+    window.multiplayerStarted = true;
+    startMultiplayerQuiz(room.questions);
+  }
+});
   } catch (error) {
     console.error(error);
     status.textContent = "كود الغرفة غير صحيح";

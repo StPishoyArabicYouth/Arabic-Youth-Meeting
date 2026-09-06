@@ -437,17 +437,65 @@ function showResult(){
 function showWheel(){hideAll();document.getElementById('wheelPanel').classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 let wheelTurns=0;
 function spinWheel(){
-  const btn=document.getElementById('spinBtn');btn.disabled=true;
-  const idx=Math.floor(Math.random()*categories.length);const slice=60;
+  const btn=document.getElementById('spinBtn');
+  btn.disabled=true;
+
+  const idx=Math.floor(Math.random()*categories.length);
+  const slice=60;
+
   wheelTurns+=5+Math.floor(Math.random()*3);
-  const target=wheelTurns*360 + (360-(idx*slice+slice/2));
-  document.getElementById('wheel').style.transform=`rotate(${target}deg)`;
+
+  const target=wheelTurns*360+(360-(idx*slice+slice/2));
+
+  const wheel=document.getElementById('wheel');
+
+  wheel.style.transform=`rotate(${target}deg)`;
+
   document.getElementById('wheelCenter').textContent='...';
   document.getElementById('wheelResult').textContent='العجلة بتلف... 🎡';
+
   setTimeout(()=>{
-    const cat=categories[idx];document.getElementById('wheelCenter').textContent='🏆';
-    document.getElementById('wheelResult').innerHTML=`وقفت على: <b>${cat}</b><br>جاهز لـ 5 أسئلة؟`;
-    setTimeout(()=>startQuiz(cat,5,'🎡 '+cat,'mixed'),900);btn.disabled=false;
+    const wheelRect=wheel.getBoundingClientRect();
+
+    const pointerX=wheelRect.left+(wheelRect.width/2);
+    const pointerY=wheelRect.top;
+
+    const labels=[...wheel.children].filter(el =>
+      el.style.position==='absolute'
+    );
+
+    let selectedLabel=null;
+    let nearest=Infinity;
+
+    labels.forEach(label=>{
+      const r=label.getBoundingClientRect();
+      const x=r.left+r.width/2;
+      const y=r.top+r.height/2;
+
+      const distance=Math.hypot(
+        x-pointerX,
+        y-pointerY
+      );
+
+      if(distance<nearest){
+        nearest=distance;
+        selectedLabel=label;
+      }
+    });
+
+    const cat=selectedLabel.textContent.trim();
+
+    document.getElementById('wheelCenter').textContent='🏆';
+
+    document.getElementById('wheelResult').innerHTML=
+      `وقفت على: <b>${cat}</b><br>جاهز لـ 5 أسئلة؟`;
+
+    setTimeout(()=>{
+      startQuiz(cat,5,'🎯 '+cat,'mixed');
+    },900);
+
+    btn.disabled=false;
+
   },4100);
 }
 function showDice(){hideAll();document.getElementById('dicePanel').classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}

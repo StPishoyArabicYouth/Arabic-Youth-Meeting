@@ -449,7 +449,7 @@ function rollDice(){
   setTimeout(()=>{
     d.classList.remove('rolling');const n=1+Math.floor(Math.random()*6);d.textContent=n;
     const ch=diceMap[n-1];document.getElementById('challengeName').textContent=ch.name;
-    setTimeout(()=>startQuiz(ch.category,3,'🎲 '+ch.name,'mixed'),900);btn.disabled=false;
+    setTimeout(()=>startQuiz(ch.category,n,'🎲 '+ch.name,'mixed'),900);btn.disabled=false;
   },1550);
 }
 function dailyQuestion(){

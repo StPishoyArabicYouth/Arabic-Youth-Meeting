@@ -8,7 +8,7 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-S6YKDST1HH');
+  gtag('config', 'G-S6YKDST1HH')
 </script>
   <script defer src="analytics-events.js"></script>
 <meta charset="utf-8">
@@ -437,66 +437,55 @@ function showResult(){
 function showWheel(){hideAll();document.getElementById('wheelPanel').classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 let wheelTurns=0;
 function spinWheel(){
-  const btn=document.getElementById('spinBtn');
-  btn.disabled=true;
+  const btn = document.getElementById('spinBtn');
+  btn.disabled = true;
 
-  const idx=Math.floor(Math.random()*categories.length);
-  const slice=60;
+  const wheelItems = [
+    {label:'الآيات', category:'الآيات'},
+    {label:'الأماكن', category:'الأماكن'},
+    {label:'المعجزات', category:'المعجزات'},
+    {label:'شخصيات', category:'الشخصيات'},
+    {label:'العهد الجديد', category:'العهد الجديد'},
+    {label:'العهد القديم', category:'العهد القديم'}
+  ];
 
-  wheelTurns+=5+Math.floor(Math.random()*3);
+  const idx = Math.floor(Math.random() * 6);
+  const slice = 60;
 
-  const target=wheelTurns*360+(360-(idx*slice+slice/2));
+  wheelTurns += 5 + Math.floor(Math.random() * 3);
 
-  const wheel=document.getElementById('wheel');
+  const target =
+    wheelTurns * 360 +
+    (360 - (idx * slice + slice / 2));
 
-  wheel.style.transform=`rotate(${target}deg)`;
+  document.getElementById('wheel').style.transform =
+    `rotate(${target}deg)`;
 
-  document.getElementById('wheelCenter').textContent='...';
-  document.getElementById('wheelResult').textContent='العجلة بتلف... 🎡';
+  document.getElementById('wheelCenter').textContent = '...';
+  document.getElementById('wheelResult').textContent =
+    'العجلة بتلف... 🎡';
 
-  setTimeout(()=>{
-    const wheelRect=wheel.getBoundingClientRect();
+  setTimeout(() => {
 
-    const pointerX=wheelRect.left+(wheelRect.width/2);
-    const pointerY=wheelRect.top;
+    const selected = wheelItems[idx];
 
-    const labels=[...wheel.children].filter(el =>
-      el.style.position==='absolute'
-    );
+    document.getElementById('wheelCenter').textContent = '🏆';
 
-    let selectedLabel=null;
-    let nearest=Infinity;
+    document.getElementById('wheelResult').innerHTML =
+      `وقفت على: <b>${selected.label}</b><br>جاهز لـ 5 أسئلة؟`;
 
-    labels.forEach(label=>{
-      const r=label.getBoundingClientRect();
-      const x=r.left+r.width/2;
-      const y=r.top+r.height/2;
-
-      const distance=Math.hypot(
-        x-pointerX,
-        y-pointerY
+    setTimeout(() => {
+      startQuiz(
+        selected.category,
+        5,
+        '🎯 ' + selected.label,
+        'mixed'
       );
+    }, 900);
 
-      if(distance<nearest){
-        nearest=distance;
-        selectedLabel=label;
-      }
-    });
+    btn.disabled = false;
 
-    const cat=selectedLabel.textContent.trim();
-
-    document.getElementById('wheelCenter').textContent='🏆';
-
-    document.getElementById('wheelResult').innerHTML=
-      `وقفت على: <b>${cat}</b><br>جاهز لـ 5 أسئلة؟`;
-
-    setTimeout(()=>{
-      startQuiz(cat,5,'🎯 '+cat,'mixed');
-    },900);
-
-    btn.disabled=false;
-
-  },4100);
+  }, 4100);
 }
 function showDice(){hideAll();document.getElementById('dicePanel').classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 function rollDice(){

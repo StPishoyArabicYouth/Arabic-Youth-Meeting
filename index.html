@@ -1253,5 +1253,34 @@ document.getElementById("dailyAnswerBtn").addEventListener("click", function () 
 })();
 </script>
 
+<script>
+function setLazyImages(root = document) {
+  if (root.matches && root.matches('img:not([loading])')) {
+    root.loading = 'lazy';
+  }
+
+  if (root.querySelectorAll) {
+    root.querySelectorAll('img:not([loading])').forEach(function(img) {
+      img.loading = 'lazy';
+    });
+  }
+}
+
+setLazyImages();
+
+new MutationObserver(function(changes) {
+  changes.forEach(function(change) {
+    change.addedNodes.forEach(function(node) {
+      if (node.nodeType === 1) {
+        setLazyImages(node);
+      }
+    });
+  });
+}).observe(document.body, {
+  childList: true,
+  subtree: true
+});
+</script>
+
 </body>
 </html>
